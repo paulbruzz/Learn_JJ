@@ -1,0 +1,187 @@
+﻿﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Terminologia - Learn Ju-Jitsu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .quiz-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: background-color 0.5s;
+        }
+        .question p {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .answers label {
+            display: block;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .answers label:hover {
+            background: #f1f1f1;
+        }
+        #submit-quiz {
+            margin-top: 20px;
+        }
+        #results {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .correct {
+            background-color: #e9f7ef; /* Light green */
+        }
+        .incorrect {
+            background-color: #fbe9e7; /* Light red */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ju-Jitsu Dojo</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            
+        </nav>
+    </header>
+
+    <main id="content">
+        <section>
+            <h2>Quiz: Terminologia</h2>
+            <div id="quiz-container" class="quiz-container"></div>
+            <button id="submit-quiz" class="button">Invia Risposte</button>
+            <div id="results"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Learn Ju-Jitsu. Tutti i diritti riservati.</p>
+    </footer>
+
+    <script>
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results');
+        const submitButton = document.getElementById('submit-quiz');
+
+        const myQuestions = [
+            {
+                question: "Cosa rappresenta il 'Rei' nel Ju-Jitsu?",
+                answers: {
+                    a: "Una tecnica di calcio",
+                    b: "Il saluto, un'espressione di rispetto",
+                    c: "Una leva articolare"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "Come si esegue il 'Ritsu Rei'?",
+                answers: {
+                    a: "In ginocchio",
+                    b: "In piedi",
+                    c: "Da sdraiati"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "Qual &egrave; il nome del saluto eseguito in ginocchio?",
+                answers: {
+                    a: "Seiza",
+                    b: "Ritsu Rei",
+                    c: "Za Rei"
+                },
+                correctAnswer: "c"
+            }
+        ];
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function buildQuiz() {
+            const output = [];
+            myQuestions.forEach((currentQuestion, questionNumber) => {
+                const answerEntries = Object.entries(currentQuestion.answers);
+                const shuffledAnswers = shuffle(answerEntries.slice()); // use slice to avoid mutating original
+
+                const answers = [];
+                for (const [letter, text] of shuffledAnswers) {
+                    answers.push(
+                        `<label>
+                            <input type="radio" name="question${questionNumber}" value="${letter}">
+                            ${text}
+                        </label>`
+                    );
+                }
+
+                output.push(
+                    `<div class="question" id="question${questionNumber}">
+                        <p>${questionNumber + 1}. ${currentQuestion.question}</p>
+                        <div class="answers">${answers.join('')}</div>
+                    </div>`
+                );
+            });
+            quizContainer.innerHTML = output.join('');
+
+            // Attach change listeners so users can modify answers after submission
+            const inputs = quizContainer.querySelectorAll('input[type=radio]');
+            inputs.forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const questionDiv = e.target.closest('.question');
+                    if (questionDiv) {
+                        questionDiv.classList.remove('correct', 'incorrect');
+                    }
+                    // clear results summary when any answer is changed
+                    resultsContainer.textContent = '';
+                });
+            });
+        }
+
+        function showResults() {
+            const answerContainers = quizContainer.querySelectorAll('.answers');
+            let numCorrect = 0;
+
+            myQuestions.forEach((currentQuestion, questionNumber) => {
+                const questionContainer = document.getElementById(`question${questionNumber}`);
+                const answerContainer = answerContainers[questionNumber];
+                const selector = `input[name=question${questionNumber}]:checked`;
+                const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+                // reset classes
+                questionContainer.classList.remove('correct', 'incorrect');
+
+                if (userAnswer === currentQuestion.correctAnswer) {
+                    numCorrect++;
+                    questionContainer.classList.add('correct');
+                } else {
+                    questionContainer.classList.add('incorrect');
+                }
+            });
+
+            resultsContainer.innerHTML = `${numCorrect} su ${myQuestions.length} risposte corrette.`;
+        }
+
+        buildQuiz();
+        submitButton.addEventListener('click', showResults);
+    </script>
+</body>
+</html>
+

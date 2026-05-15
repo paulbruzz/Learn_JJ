@@ -1,0 +1,49 @@
+﻿﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Spostamenti (Shintai Waza) - Learn Ju-Jitsu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .quiz-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .question { margin-bottom: 20px; padding: 15px; border-radius: 8px; transition: background-color 0.5s; }
+        .question p { font-weight: bold; margin-bottom: 10px; }
+        .answers label { display: block; margin-bottom: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; cursor: pointer; }
+        .answers label:hover { background: #f1f1f1; }
+        #submit-quiz { margin-top: 20px; }
+        #results { margin-top: 20px; font-weight: bold; font-size: 1.2rem; }
+        .correct { background-color: #e9f7ef; }
+        .incorrect { background-color: #fbe9e7; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Ju-Jitsu Dojo</h1>
+    <nav><a href="index.html">Home</a></nav>
+</header>
+<main id="content">
+    <section>
+        <h2>Quiz: Spostamenti (<i>Shintai Waza</i>)</h2>
+        <div id="quiz-container" class="quiz-container"></div>
+        <button id="submit-quiz" class="button">Invia Risposte</button>
+        <div id="results"></div>
+    </section>
+</main>
+<footer><p>&copy; 2026 Learn Ju-Jitsu. Tutti i diritti riservati.</p></footer>
+<script>
+const quizContainer=document.getElementById('quiz-container');
+const resultsContainer=document.getElementById('results');
+const submitButton=document.getElementById('submit-quiz');
+const myQuestions=[
+    { question: "L'<i>Ayumi Ashi</i> &egrave;:", answers: { a: "Un passo naturale alternato", b: "Un tipo di caduta", c: "Una presa articolare" }, correctAnswer: "a" },
+    { question: "Il <i>Tsugi Ashi</i> si caratterizza per:", answers: { a: "Un piede che avanza e l'altro lo segue senza superarlo", b: "Un salto", c: "Uno sbilanciamento laterale" }, correctAnswer: "a" },
+    { question: "Il <i>Tai Sabaki</i> &egrave; principalmente:", answers: { a: "Un movimento del corpo/rotazione per cambiare angolazione", b: "Un colpo con il pugno", c: "Un tipo di immobilizzazione" }, correctAnswer: "a" }
+];
+function shuffle(array){ let c=array.length,r; while(c){ r=Math.floor(Math.random()*c); c--; [array[c],array[r]]=[array[r],array[c]];} return array; }
+function buildQuiz(){ const output=[]; myQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
+function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; myQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${myQuestions.length} risposte corrette.`; }
+buildQuiz(); submitButton.addEventListener('click',showResults);
+</script>
+</body>
+</html>

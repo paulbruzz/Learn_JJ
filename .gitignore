@@ -1,0 +1,8 @@
+.vs/
+backup_before_utf8/
+backup_before_spellfix/
+*.log
+*.user
+*.suo
+.DS_Store
+node_modules/
