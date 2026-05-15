@@ -14,32 +14,73 @@
         </nav>
     </header>
 
+    <style>
+        /* Layout for judogi theory: text on the left, illustration on the right */
+        .judogi-layout {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+        .judogi-text {
+            flex: 1 1 60%;
+            min-width: 200px;
+        }
+        .judogi-figure {
+            flex: 0 0 320px;
+            max-width: 40%;
+        }
+        .judogi-figure img {
+            width: 130%;
+            height: auto;
+            display: block;
+        }
+        @media (max-width: 800px) {
+            .judogi-layout { flex-direction: column; }
+            .judogi-figure { flex: 0 0 auto; max-width: 100%; }
+        }
+    </style>
+
     <main id="content">
-        <section>
-            <h2>La giacca del <i>judogi</i> (<i>Uwagi</i>)</h2>
-            <ul>
-                <li><strong><i>Eri</i></strong> Il bavero, spesso utilizzato per tenere sotto controllo l&#39;avversario o per effettuare qualsiasi tipo di attacco.</li>
-                <li><strong><i>Sode</i></strong> La manica: parte del kimono che di solito viene afferrata e utilizzata per eseguire diverse tecniche.</li>
-                <li><strong><i>Sodeguchi</i></strong> L&#39;apertura della manica: punto importante per sbilanciare l&#39;avversario e mantenere il controllo della mano.</li>
-                <li><strong><i>Waki</i></strong> L&#39;ascella: rinforzata per il comfort del <i>jutsuka</i>.</li>
-                <li><strong><i>Koshi</i></strong> L&#39;anca: nel ju-jitsu si utilizzano molte tecniche d&#39;anca ed &egrave; una parte essenziale del <i>judogi</i>.</li>
-            </ul>
-        </section>
-        <section>
-            <h2>La cintura (<i>Obi</i>)</h2>
-            <ul>
-                <li><strong><i>Musubi</i></strong> Il nodo.</li>
-            </ul>
-        </section>
-        <section>
-            <h2>Pantaloni del <i>Judogi</i> (<i>Zubon</i>)</h2>
-            <ul>
-                <li><strong><i>Ashi</i></strong> La gamba: la parte del corpo utilizzata per molte tecniche.</li>
-                <li><strong><i>Hiza</i></strong> Il ginocchio: alcune tecniche, come l&rsquo;<i>Hiza Guruma</i>, prendono il nome da questa parte del corpo.</li>
-                <li><strong><i>Mata</i></strong> L&rsquo;interno coscia; tecniche come l&rsquo;<i>Uchi Mata</i> derivano da questo termine.</li>
-                <li><strong><i>Ashikubi</i></strong> La caviglia: parte centrale nella rotazione, nel movimento e nell&rsquo;esecuzione di molti movimenti.</li>
-            </ul>
-        </section>
+        <div class="judogi-layout">
+            <div class="judogi-text">
+                <section id="uwagi">
+                    <h2>La giacca del <i>judogi</i> (<i>Uwagi</i>)</h2>
+                    <div style="display:flex;gap:16px;align-items:flex-start;">
+                        <div style="flex:1 1 60%;min-width:180px;">
+                            <ul>
+                                <li><strong><i>Eri</i></strong> — Il bavero, spesso utilizzato per tenere sotto controllo l&#39;avversario o per effettuare qualsiasi tipo di attacco.</li>
+                                <li><strong><i>Sode</i></strong> — La manica: parte del kimono che di solito viene afferrata e utilizzata per eseguire diverse tecniche.</li>
+                                <li><strong><i>Sodeguchi</i></strong> — L&#39;apertura della manica: punto importante per sbilanciare l&#39;avversario e mantenere il controllo della mano.</li>
+                                <li><strong><i>Waki</i></strong> — L&#39;ascella: rinforzata per il comfort del judoka.</li>
+                                <li><strong><i>Koshi</i></strong> — L&#39;anca: nel ju-jitsu si utilizzano molte tecniche d&#39;anca ed &egrave; una parte essenziale del <i>judogi</i>.</li>
+                            </ul>
+                        </div>
+                        <div class="judogi-figure" style="flex:0 0 320px;max-width:40%;">
+                            <figure>
+                                <img src="uwagi.svg" alt="Illustrazione parti del judogi (Uwagi)">
+                            </figure>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>La cintura (<i>Obi</i>)</h2>
+                    <ul>
+                        <li><strong><i>Musubi</i></strong> — Il nodo.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Pantaloni del <i>Judogi</i> (<i>Zubon</i>)</h2>
+                    <ul>
+                        <li><strong><i>Ashi</i></strong> — La gamba: la parte del corpo utilizzata per molte tecniche.</li>
+                        <li><strong><i>Hiza</i></strong> — Il ginocchio: alcune tecniche, come l&rsquo;<i>Hiza Guruma</i>, prendono il nome da questa parte del corpo.</li>
+                        <li><strong><i>Mata</i></strong> — L&rsquo;interno coscia; tecniche come l&rsquo;<i>Uchi Mata</i> derivano da questo termine.</li>
+                        <li><strong><i>Ashikubi</i></strong> — La caviglia: parte centrale nella rotazione, nel movimento e nell&rsquo;esecuzione di molti movimenti.</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
     </main>
 
     <footer>
