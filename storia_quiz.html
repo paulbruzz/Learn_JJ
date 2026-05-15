@@ -1,9 +1,9 @@
-﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz: Strangolamenti (Shime Waza) - Learn Ju-Jitsu</title>
+    <title>Quiz: Storia del Ju Jitsu - Learn Ju-Jitsu</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .quiz-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -24,7 +24,7 @@
 </header>
 <main id="content">
     <section>
-        <h2>Quiz: Strangolamenti (<i>Shime Waza</i>)</h2>
+        <h2>Quiz: Storia del <i>Ju Jitsu</i></h2>
         <div id="quiz-container" class="quiz-container"></div>
         <button id="submit-quiz" class="button">Invia Risposte</button>
         <div id="results"></div>
@@ -35,14 +35,25 @@
 const quizContainer=document.getElementById('quiz-container');
 const resultsContainer=document.getElementById('results');
 const submitButton=document.getElementById('submit-quiz');
+
 const myQuestions=[
-    { question: "Le <i>shime waza</i> agiscono principalmente su:", answers: { a: "La circolazione sanguigna o la respirazione", b: "Le gambe", c: "La presa del polso" }, correctAnswer: "a" },
-    { question: "La <i>Nami Juji Jime</i> utilizza:", answers: { a: "Le gambe per triangolare", b: "Il bavero del judogi con presa a croce", c: "Solo una mano" }, correctAnswer: "b" },
-    { question: "La <i>Hadaka Jime</i> &egrave;:", answers: { a: "Una strangolazione a mani nude", b: "Una parata", c: "Una proiezione" }, correctAnswer: "a" }
+    { question: "In quale periodo storico si fanno risalire le origini del Ju Jitsu?", answers: { a: "Periodo Kamakura (1185-1333)", b: "Periodo Meiji (1868-1912)", c: "Periodo Heian (794-1185)" }, correctAnswer: "a" },
+    { question: "Cosa significa il termine 'Dojo Arashi'?", answers: { a: "Scuola calma", b: "Tempesta che si abbatte dove si studia il metodo", c: "Sfida amichevole" }, correctAnswer: "b" },
+    { question: "Quale periodo favor&igrave; la diffusione e la rielaborazione delle tecniche di Ju Jitsu in Giappone?", answers: { a: "Il periodo di guerre civili fino al 1600", b: "Il lungo periodo di pace sotto Tokugawa", c: "L'occupazione mongola" }, correctAnswer: "b" },
+    { question: "Quale delle seguenti scuole &egrave; citata tra i ryu storici?", answers: { a: "Tenjin Shinyo", b: "Karate-do", c: "Taekwondo" }, correctAnswer: "a" },
+    { question: "Chi &egrave; considerato tra i pionieri del Ju Jitsu in Europa all'inizio del '900?", answers: { a: "Gunji Koizumi", b: "Raku Uyenishi e Yukio Tani", c: "Jigoro Kano" }, correctAnswer: "b" },
+    { question: "Quando si tenne la prima dimostrazione di 'lotta giapponese' in Italia?", answers: { a: "1908", b: "1924", c: "1918" }, correctAnswer: "a" },
+    { question: "Quale scuola tradizionale &egrave; associata all'immagine del salice?", answers: { a: "Katori Shinto", b: "Hontai Yoshin Ryu", c: "Takenouchi-ryu" }, correctAnswer: "b" },
+    { question: "Cosa indica il termine <i>Ju</i> in <i>Ju Jitsu</i>?", answers: { a: "Forza", b: "Cedevolezza / flessibilit&agrave;", c: "Velocit&agrave;" }, correctAnswer: "b" },
+    { question: "I Settori del 'Metodo Bianchi' raggruppano le tecniche in quanti gruppi da 20?", answers: { a: "3", b: "5", c: "10" }, correctAnswer: "b" }
 ];
+
 function shuffle(a){ let c=a.length,r; while(c){ r=Math.floor(Math.random()*c); c--; [a[c],a[r]]=[a[r],a[c]];} return a; }
+
 function buildQuiz(){ const output=[]; myQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
+
 function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; myQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${myQuestions.length} risposte corrette.`; }
+
 buildQuiz(); submitButton.addEventListener('click',showResults);
 </script>
 </body>
