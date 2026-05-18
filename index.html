@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learn Ju-Jitsu</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="menu.css">
 </head>
 <body>
     <header>
@@ -19,19 +20,191 @@
             <h2>Benvenuto!</h2>
             <p>Seleziona un argomento per iniziare il tuo percorso nell'apprendimento del Ju-Jitsu giapponese.</p>
             <nav class="main-menu">
-                <div class="menu-item"><span>Storia</span><div class="buttons"><a href="storia_teoria.html" class="button">Teoria</a><a href="storia_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Saluto</span><div class="buttons"><a href="saluto_teoria.html" class="button">Teoria</a><a href="saluto_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Cadute (Ukemi Waza)</span><div class="buttons"><a href="cadute_teoria.html" class="button">Teoria</a><a href="cadute_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Spostamenti (Shintai Waza)</span><div class="buttons"><a href="spostamenti_teoria.html" class="button">Teoria</a><a href="spostamenti_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Parate (Uke Waza)</span><div class="buttons"><a href="parate_teoria.html" class="button">Teoria</a><a href="parate_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Colpi (Atemi Waza)</span><div class="buttons"><a href="colpi_teoria.html" class="button">Teoria</a><a href="colpi_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Calci (Keri Waza)</span><div class="buttons"><a href="calci_teoria.html" class="button">Teoria</a><a href="calci_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Proiezioni (Nage Waza)</span><div class="buttons"><a href="proiezioni_teoria.html" class="button">Teoria</a><a href="proiezioni_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Strangolamenti (Shime Waza)</span><div class="buttons"><a href="strangolamenti_teoria.html" class="button">Teoria</a><a href="strangolamenti_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Leve articolari (Kansetsu Waza)</span><div class="buttons"><a href="leve_teoria.html" class="button">Teoria</a><a href="leve_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Immobilizzazioni (Katame Waza)</span><div class="buttons"><a href="immobilizzazioni_teoria.html" class="button">Teoria</a><a href="immobilizzazioni_quiz.html" class="button">Quiz</a></div></div>
-                <div class="menu-item"><span>Parti del judogi</span><div class="buttons"><a href="judogi_teoria.html" class="button">Teoria</a><a href="judogi_quiz.html" class="button">Quiz</a></div></div>
+                <div class="wiki-section">
+                    <button class="wiki-collapsible" aria-expanded="false">Teoria <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Teoria</h4>
+                            <ul>
+                                <li><a href="storia_teoria.html">Storia</a></li>
+                                <li><a href="saluto_teoria.html">Saluto</a></li>
+                                <li><a href="cadute_teoria.html">Cadute (Ukemi Waza)</a></li>
+                                <li><a href="spostamenti_teoria.html">Spostamenti (Shintai Waza)</a></li>
+                                <li><a href="parate_teoria.html">Parate (Uke Waza)</a></li>
+                                <li><a href="colpi_teoria.html">Colpi (Atemi Waza)</a></li>
+                                <li><a href="calci_teoria.html">Calci (Geri Waza)</a></li>
+                                <li><a href="proiezioni_teoria.html">Proiezioni (Nage Waza)</a></li>
+                                <li><a href="strangolamenti_teoria.html">Strangolamenti (Shime Waza)</a></li>
+                                <li><a href="leve_teoria.html">Leve articolari (Kansetsu Waza)</a></li>
+                                <li><a href="immobilizzazioni_teoria.html">Immobilizzazioni (Katame Waza)</a></li>
+                                <li><a href="judogi_teoria.html">Parti del judogi</a></li>
+                            </ul>
+                        </div>                     
+                    </div>
+                </div>
+                <!-- Belt headers (collapsed by default) -->
+
+                <!-- Top-level Quiz section (separate wiki-section) -->
+                <div class="wiki-section">
+                    <button class="wiki-collapsible" aria-expanded="false">Quiz <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Quiz</h4>
+                            <ul>
+                                <li><a href="storia_quiz.html">Storia</a></li>
+                                <li><a href="saluto_quiz.html">Saluto</a></li>
+                                <li><a href="cadute_quiz.html">Cadute (Ukemi Waza)</a></li>
+                                <li><a href="spostamenti_quiz.html">Spostamenti (Shintai Waza)</a></li>
+                                <li><a href="parate_quiz.html">Parate (Uke Waza)</a></li>
+                                <li><a href="colpi_quiz.html">Colpi (Atemi Waza)</a></li>
+                                <li><a href="calci_quiz.html">Calci (Geri Waza)</a></li>
+                                <li><a href="proiezioni_quiz.html">Proiezioni (Nage Waza)</a></li>
+                                <li><a href="strangolamenti_quiz.html">Strangolamenti (Shime Waza)</a></li>
+                                <li><a href="leve_quiz.html">Leve articolari (Kansetsu Waza)</a></li>
+                                <li><a href="immobilizzazioni_quiz.html">Immobilizzazioni (Katame Waza)</a></li>
+                                <li><a href="judogi_quiz.html">Parti del judogi</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="wiki-section belt-gialla">
+                    <button class="wiki-collapsible" aria-expanded="false">Cintura gialla <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Teoria</h4>
+                            <ul>
+                                <li><a href="storia_teoria.html">Storia</a></li>
+                                <li><a href="saluto_teoria.html">Saluto</a></li>
+                                <li><a href="cadute_teoria.html">Cadute (Ukemi Waza)</a></li>
+                                <li><a href="spostamenti_teoria.html">Spostamenti (Shintai Waza)</a></li>
+                                <li><a href="parate_teoria.html">Parate (Uke Waza)</a></li>
+                                <li><a href="colpi_teoria.html">Colpi (Atemi Waza)</a></li>
+                            </ul>
+                        </div>
+                        <div class="links-group">
+                            <h4>Quiz</h4>
+                            <ul>
+                                <li><a href="storia_quiz.html">Storia</a></li>
+                                <li><a href="saluto_quiz.html">Saluto</a></li>
+                                <li><a href="cadute_quiz.html">Cadute (Ukemi Waza)</a></li>
+                                <li><a href="spostamenti_quiz.html">Spostamenti (Shintai Waza)</a></li>
+                                <li><a href="parate_quiz.html">Parate (Uke Waza)</a></li>
+                                <li><a href="colpi_quiz.html">Colpi (Atemi Waza)</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wiki-section belt-arancione">
+                    <button class="wiki-collapsible" aria-expanded="false">Cintura arancione <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Teoria</h4>
+                            <ul>
+                                <li><a href="storia_teoria.html">Storia</a></li>
+                                <li><a href="saluto_teoria.html">Saluto</a></li>
+                                <li><a href="cadute_teoria.html">Cadute (Ukemi Waza)</a></li>
+                            </ul>
+                        </div>
+                        <div class="links-group">
+                            <h4>Quiz</h4>
+                            <ul>
+                                <li><a href="storia_quiz.html">Storia</a></li>
+                                <li><a href="saluto_quiz.html">Saluto</a></li>
+                                <li><a href="cadute_quiz.html">Cadute (Ukemi Waza)</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wiki-section belt-verde">
+                    <button class="wiki-collapsible" aria-expanded="false">Cintura verde <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Teoria</h4>
+                            <ul>
+                                <li><a href="storia_teoria.html">Storia</a></li>
+                                <li><a href="spostamenti_teoria.html">Spostamenti</a></li>
+                                <li><a href="parate_teoria.html">Parate</a></li>
+                            </ul>
+                        </div>
+                        <div class="links-group">
+                            <h4>Quiz</h4>
+                            <ul>
+                                <li><a href="storia_quiz.html">Storia</a></li>
+                                <li><a href="spostamenti_quiz.html">Spostamenti</a></li>
+                                <li><a href="parate_quiz.html">Parate</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wiki-section belt-blu">
+                    <button class="wiki-collapsible" aria-expanded="false">Cintura blu <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Teoria</h4>
+                            <ul>
+                                <li><a href="storia_teoria.html">Storia</a></li>
+                                <li><a href="colpi_teoria.html">Colpi</a></li>
+                                <li><a href="calci_teoria.html">Calci</a></li>
+                            </ul>
+                        </div>
+                        <div class="links-group">
+                            <h4>Quiz</h4>
+                            <ul>
+                                <li><a href="storia_quiz.html">Storia</a></li>
+                                <li><a href="colpi_quiz.html">Colpi</a></li>
+                                <li><a href="calci_quiz.html">Calci</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wiki-section belt-marrone">
+                    <button class="wiki-collapsible" aria-expanded="false">Cintura marrone <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Teoria</h4>
+                            <ul>
+                                <li><a href="storia_teoria.html">Storia</a></li>
+                                <li><a href="leve_teoria.html">Leve articolari</a></li>
+                                <li><a href="immobilizzazioni_teoria.html">Immobilizzazioni</a></li>
+                            </ul>
+                        </div>
+                        <div class="links-group">
+                            <h4>Quiz</h4>
+                            <ul>
+                                <li><a href="storia_quiz.html">Storia</a></li>
+                                <li><a href="leve_quiz.html">Leve articolari</a></li>
+                                <li><a href="immobilizzazioni_quiz.html">Immobilizzazioni</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wiki-section belt-nera">
+                    <button class="wiki-collapsible" aria-expanded="false">Cintura nera <span class="triangle">▾</span></button>
+                    <div class="wiki-content">
+                        <div class="links-group">
+                            <h4>Teoria</h4>
+                            <ul>
+                                <li><a href="storia_teoria.html">Storia</a></li>
+                                <li><a href="judogi_teoria.html">Parti del judogi</a></li>
+                            </ul>
+                        </div>
+                        <div class="links-group">
+                            <h4>Quiz</h4>
+                            <ul>
+                                <li><a href="storia_quiz.html">Storia</a></li>
+                                <li><a href="judogi_quiz.html">Parti del judogi</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
             </nav>
+            <div id="expanded-panel" class="expanded-panel" aria-live="polite"></div>
         </section>
     </main>
 
@@ -39,6 +212,130 @@
         <p>&copy; 2026 Learn Ju-Jitsu. Tutti i diritti riservati.</p>
     </footer>
 
+    <script>
+        // Wiki-like collapsible with smooth height transition
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggles = document.querySelectorAll('.wiki-collapsible');
+            const expandedPanel = document.getElementById('expanded-panel');
+            toggles.forEach(btn => {
+                const content = btn.nextElementSibling; // template content
+                // ensure collapsed
+                if (content && content.classList.contains('wiki-content')) {
+                    content.style.maxHeight = '0px';
+                    content.style.overflow = 'hidden';
+                    content.style.display = 'block';
+                }
+                btn.addEventListener('click', function () {
+                    const isCurrentlyOpen = btn.classList.contains('open');
+
+                    // Close all other sections first
+                    toggles.forEach(otherBtn => {
+                        const otherContent = otherBtn.nextElementSibling;
+                        if (otherBtn !== btn && otherBtn.classList.contains('open')) {
+                            otherBtn.classList.remove('open');
+                            otherBtn.setAttribute('aria-expanded', 'false');
+                            if (otherContent) {
+                                otherContent.style.maxHeight = '0px';
+                            }
+                            // also collapse expandedPanel if it contains that other content
+                            if (expandedPanel && expandedPanel.dataset.source === otherBtn.dataset.id) {
+                                // capture current source id so we don't clear new content inserted later
+                                const expected = expandedPanel.dataset.source;
+                                expandedPanel.style.maxHeight = '0px';
+                                // clear after transition only if source unchanged
+                                expandedPanel.addEventListener('transitionend', function handler() {
+                                    if (expandedPanel.dataset.source === expected) {
+                                        expandedPanel.innerHTML = '';
+                                        delete expandedPanel.dataset.source;
+                                    }
+                                }, { once: true });
+                            }
+                        }
+                    });
+
+                    if (isCurrentlyOpen) {
+                        // close this one
+                        btn.classList.remove('open');
+                        btn.setAttribute('aria-expanded', 'false');
+                        if (expandedPanel) {
+                            const expected = expandedPanel.dataset.source;
+                            expandedPanel.style.maxHeight = '0px';
+                            expandedPanel.classList.remove('open');
+                            expandedPanel.addEventListener('transitionend', function handler() {
+                                if (expandedPanel.dataset.source === expected) {
+                                    expandedPanel.innerHTML = '';
+                                    delete expandedPanel.dataset.source;
+                                }
+                            }, { once: true });
+                        }
+                    } else {
+                        // open this one: copy its inner template into the full-width expanded panel
+                        if (!content || !expandedPanel) return;
+                        // mark source so closing others can detect
+                        expandedPanel.dataset.source = btn.dataset.id || Math.random().toString(36).slice(2);
+                        btn.dataset.id = expandedPanel.dataset.source;
+                        // populate
+                        expandedPanel.innerHTML = content.innerHTML;
+                        // compute top position so panel appears immediately under the clicked button
+                        const lezioni = document.getElementById('lezioni');
+                        const btnRect = btn.getBoundingClientRect();
+                        const lezRect = lezioni.getBoundingClientRect();
+                        // position relative to #lezioni: use viewport rects difference (no scrollTop)
+                        const topPos = btnRect.bottom - lezRect.top;
+                        expandedPanel.style.top = Math.max(topPos, 0) + 'px';
+                        // set caret horizontal position relative to #lezioni for visual attachment
+                        const caretX = (btnRect.left - lezRect.left) + (btnRect.width / 2);
+                        expandedPanel.style.setProperty('--caret-left', Math.max(caretX, 16) + 'px');
+                        // expanded panel contains direct link lists (no sub-toggles)
+
+                        // ensure visible then measure
+                        expandedPanel.style.display = 'block';
+                        // reset maxHeight to allow recalculation
+                        expandedPanel.style.maxHeight = '0px';
+                        requestAnimationFrame(() => {
+                            const contentHeight = expandedPanel.scrollHeight;
+                            const footer = document.querySelector('footer');
+                            const btnRect2 = btn.getBoundingClientRect();
+                            const lezRect2 = lezioni.getBoundingClientRect();
+                            // available space between button bottom and footer top (in viewport coords)
+                            const footerTop = footer ? footer.getBoundingClientRect().top : window.innerHeight;
+                            const spaceBelowBtn = Math.max(footerTop - btnRect2.bottom - 20, window.innerHeight - btnRect2.bottom - 20);
+                            // ensure we have a sensible minimum available space to show the panel
+                            const minAvailable = 120; // px
+                            const available = Math.max(spaceBelowBtn, minAvailable);
+                            const finalHeight = Math.min(contentHeight, available);
+                            expandedPanel.style.maxHeight = (finalHeight > 0 ? finalHeight : 0) + 'px';
+                            // enable internal scroll if content taller than available
+                            expandedPanel.style.overflowY = contentHeight > finalHeight ? 'auto' : 'visible';
+                            expandedPanel.classList.add('open');
+                            btn.classList.add('open');
+                            btn.setAttribute('aria-expanded', 'true');
+                        });
+                    }
+                });
+            });
+
+            // close expanded panel when clicking outside
+            document.addEventListener('click', function (ev) {
+                const target = ev.target;
+                if (!target.closest('.wiki-collapsible') && !target.closest('#expanded-panel')) {
+                    const panel = document.getElementById('expanded-panel');
+                    if (panel && panel.dataset.source) {
+                        const expected = panel.dataset.source;
+                        panel.style.maxHeight = '0px';
+                        panel.classList.remove('open');
+                        panel.addEventListener('transitionend', function handler() {
+                            if (panel.dataset.source === expected) {
+                                panel.innerHTML = '';
+                                delete panel.dataset.source;
+                            }
+                        }, { once: true });
+                        document.querySelectorAll('.wiki-collapsible.open').forEach(b => b.classList.remove('open'));
+                    }
+                }
+            });
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

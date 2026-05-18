@@ -1,0 +1,134 @@
+/* Menu-specific styles moved from index.html */
+/* Wikipedia-like collapsible sections - stable grid layout */
+.main-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-auto-rows: 1fr; /* make rows equal height */
+    gap: 12px;
+    align-items: start;
+}
+.wiki-section {
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    overflow: visible;
+    padding: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+.wiki-collapsible {
+    background: #f8f9fa;
+    border: none;
+    padding: 10px 12px;
+    width: 100%; /* header fills the wiki-section width */
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+.wiki-collapsible .triangle {
+    transition: transform 0.2s ease;
+    font-size: 0.95em;
+}
+.wiki-collapsible.open .triangle { transform: rotate(180deg); }
+.wiki-content {
+    overflow: hidden;
+    transition: max-height 0.28s ease;
+    max-height: 0; /* collapsed */
+    width: 100%;
+    box-sizing: border-box;
+}
+#lezioni { position: relative; }
+.expanded-panel {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    overflow: hidden;
+    transition: max-height 0.28s ease, opacity 0.18s ease;
+    max-height: 0;
+    opacity: 0;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    /* visually attach to card: no top radius so it looks connected */
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    padding: 12px;
+    box-sizing: border-box;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+/* small caret to visually connect the expanded panel to the clicked header */
+.expanded-panel::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: var(--caret-left, 40px);
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #e2e2e2; /* border color of panel */
+    pointer-events: none;
+}
+.expanded-panel::after {
+    /* inner white triangle to match panel background */
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: var(--caret-left, 40px);
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #fff;
+    pointer-events: none;
+}
+.expanded-panel .grid-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    align-items: start;
+}
+.expanded-panel .menu-item { display:flex; justify-content:space-between; align-items:center; padding:8px; background:#fafafa; border-radius:4px; }
+/* when visible set opacity to 1 */
+.expanded-panel.open { opacity: 1; }
+/* note: section stays in its grid column; content expands within the section */
+.wiki-content-inner {
+    padding: 10px 0 12px 0;
+}
+.wiki-content .menu-item { padding: 6px 0; border-bottom: 1px dashed #eee; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.wiki-content .menu-item:last-child { border-bottom: none; }
+.menu-item span { display:block; font-weight:500; font-size:0.95rem; }
+.buttons { display:flex; gap:8px; }
+.buttons .button { padding:6px 10px; font-size:0.9rem; border-radius:4px; }
+/* Ensure wiki content menu-items override global .menu-item styles */
+.wiki-content .menu-item span { margin-bottom: 0; }
+.wiki-content .menu-item .buttons { justify-content: flex-end; }
+/* make header fixed on small screens too */
+@media (max-width: 600px) {
+    .wiki-collapsible { width: 100%; }
+}
+
+/* Belt colors (pastel) */
+.wiki-section.belt-gialla .wiki-collapsible { background: linear-gradient(180deg,#fff9c4,#fff7a8); color:#222; }
+.wiki-section.belt-arancione .wiki-collapsible { background: linear-gradient(180deg,#ffe0b2,#ffd1a8); color:#222; }
+.wiki-section.belt-verde .wiki-collapsible { background: linear-gradient(180deg,#dff0d8,#c8e6c9); color:#1b5e20; }
+.wiki-section.belt-blu .wiki-collapsible { background: linear-gradient(180deg,#d9eeff,#bbdefb); color:#0d47a1; }
+.wiki-section.belt-marrone .wiki-collapsible { background: linear-gradient(180deg,#efebe9,#e0d7d0); color:#4e342e; }
+.wiki-section.belt-nera .wiki-collapsible { background: linear-gradient(180deg,#616161,#424242); color:#fff; }
+
+/* Links group styling used inside wiki-content */
+.links-group h4 { margin: 6px 0; font-size: 0.95rem; }
+.links-group ul { list-style: none; padding: 6px 0 12px 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+.links-group li { margin: 0; }
+.links-group a { display:block; padding:6px 8px; background:#fafafa; border-radius:4px; text-decoration:none; color:inherit; }
+.links-group a:hover { background:#eee; }
