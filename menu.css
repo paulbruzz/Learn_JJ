@@ -129,6 +129,19 @@
 /* Links group styling used inside wiki-content */
 .links-group h4 { margin: 6px 0; font-size: 0.95rem; }
 .links-group ul { list-style: none; padding: 6px 0 12px 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
-.links-group li { margin: 0; }
+.links-group li { margin: 0; border: 0.1vw solid black; border-radius: 4px; }
 .links-group a { display:block; padding:6px 8px; background:#fafafa; border-radius:4px; text-decoration:none; color:inherit; }
 .links-group a:hover { background:#eee; }
+/* icon inside link */
+.links-group a img.icon { width:3vw; height:3vw; margin-right:8px; vertical-align:middle; }
+/* card-like style for links */
+.links-group a {
+    border: 1px solid transparent;
+    transition: transform 0.08s ease, box-shadow 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+.links-group a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+
