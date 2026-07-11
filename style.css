@@ -105,6 +105,11 @@ h2 {
     display: inline-block;
     background: #555;
     color: #fff;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    -webkit-appearance: none;
+    appearance: none;
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
@@ -114,6 +119,10 @@ h2 {
 
 .button:hover {
     background: #777;
+}
+
+.button:visited {
+    color: #fff;
 }
 
 /* Footer */
