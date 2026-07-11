@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz misto cintura - Learn Ju-Jitsu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .quiz-container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .question { margin-bottom: 20px; padding: 15px; border-radius: 8px; transition: background-color 0.5s; }
+        .question p { font-weight: bold; margin-bottom: 10px; }
+        .answers label { display: block; margin-bottom: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; cursor: pointer; }
+        .answers label:hover { background: #f1f1f1; }
+        #submit-quiz { margin-top: 20px; }
+        #results { margin-top: 20px; font-weight: bold; font-size: 1.2rem; }
+        .correct { background-color: #e9f7ef; }
+        .incorrect { background-color: #fbe9e7; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Teoria del Ju-Jitsu</h1>
+    <nav><a href="index.html">Home</a></nav>
+</header>
+<main id="content">
+    <section>
+        <h2 id="quiz-title">Quiz misto cintura</h2>
+        <div id="quiz-container" class="quiz-container"></div>
+        <button id="submit-quiz" class="button">Invia Risposte</button>
+        <button id="new-quiz" class="button" type="button">Nuovo quiz casuale</button>
+        <div id="results"></div>
+    </section>
+</main>
+<footer><p>&copy; 2026 Learn Ju-Jitsu. Tutti i diritti riservati.</p></footer>
+<script>
+const BELTS = {
+    gialla: ["4A","16A","2B","17B","5C","6C","1D","13D","1E","9E"],
+    arancione: ["2A","13A","3B","10B","2C","3C","3D","2E","3E","4E"],
+    verde: ["1A","7A","9A","17A","1B","4B","17C","18C","7E","14E"],
+    blu: ["8A","18A","12B","15B","16B","8C","9C","10C","13C","15C"],
+    marrone: ["5A","12A","15A","8B","11B","14B","20B","1C","16C","20E"]
+};
+
+const TITLES = {
+    "4A": "Contro strangolamento diretto",
+    "16A": "Contro presa del bavero",
+    "2B": "Contro pugno diretto - Koshi Guruma",
+    "17B": "Contro pugno diretto - Tsukuri Goshi",
+    "5C": "Contro pugno diretto - Ashi Gatame",
+    "6C": "Contro pugnalata dall'alto - Ude Garami",
+    "1D": "Contro pugno diretto - Eri Jime",
+    "13D": "Contro pugno diretto - Do Jime",
+    "1E": "Contro strangolamento diretto",
+    "9E": "Contro pugno diretto",
+    "2A": "Contro pugno diretto",
+    "13A": "Contro pugnalata dall'alto",
+    "3B": "Contro pugno diretto - Seoi Nage",
+    "10B": "Contro pugno diretto - Hidari Ippon Seoi",
+    "2C": "Contro pugno diretto - Hiza Gatame",
+    "3C": "Contro pugnalata dal basso - Ashi Katame",
+    "3D": "Contro pugno diretto - Nami Juji Jime",
+    "2E": "Contro pugnalata dall'alto",
+    "3E": "Contro pugno diretto",
+    "4E": "Contro strangolamento diretto",
+    "1A": "Contro pugno diretto",
+    "7A": "Contro pugno diretto",
+    "9A": "Contro estrazione arma cintura",
+    "17A": "Contro calcio",
+    "1B": "Contro pugno diretto - Ippon Seoi Nage",
+    "4B": "Contro pugno diretto - Uki Goshi",
+    "17C": "Contro pugnalata dal basso - Kata Gatame in Kesa",
+    "18C": "Contro pistola al torace - Ude Ushiro Waki Gatame",
+    "7E": "Contro strangolamento diretto",
+    "14E": "Contro pugno diretto",
+    "8A": "Contro strangolamento diretto",
+    "18A": "Contro strangolamento diretto - Uki Waza",
+    "12B": "Contro pugno diretto - Hane Goshi",
+    "15B": "Contro pugno diretto - Kata Guruma",
+    "16B": "Contro avvolgimento del collo - O Seoi Otoshi",
+    "8C": "Contro pugno diretto - Ushiro Waki Gatame",
+    "9C": "Contro pugno diretto - Hara Gatame",
+    "10C": "Contro pugnalata dall'alto - Waki Gatame in Kesa",
+    "13C": "Contro strangolamento diretto - Juji Garami",
+    "15C": "Contro calcio frontale - Ashi Ishigi",
+    "5A": "Contro attacco a distanza",
+    "12A": "Contro attacco a distanza",
+    "15A": "Contro pugno diretto",
+    "8B": "Contro avvolgimento in vita alle spalle - Goshi Kubi Nage",
+    "11B": "Contro attacco diretto - transizione in Tomoe Nage",
+    "14B": "Contro fendente lato sinistro - Harai Goshi",
+    "20B": "Contro fendente lato sinistro - Age Harai Goshi",
+    "1C": "Contro pugno diretto",
+    "16C": "Contro calcio frontale - Hiza Eri Gatame",
+    "20E": "Contro strangolamento alle spalle"
+};
+
+const QUIZ_SIZE = 10;
+const quizContainer = document.getElementById('quiz-container');
+const resultsContainer = document.getElementById('results');
+const submitButton = document.getElementById('submit-quiz');
+const newQuizButton = document.getElementById('new-quiz');
+const titleEl = document.getElementById('quiz-title');
+
+const belt = (new URLSearchParams(location.search).get('belt') || '').toLowerCase();
+const beltCodes = BELTS[belt] || [];
+const allCodes = Object.values(BELTS).flat();
+let activeQuestions = [];
+
+function suffixToSector(code) {
+    const s = (code || '').slice(-1);
+    if (s === 'A') return 'Settore A';
+    if (s === 'B') return 'Settore B';
+    if (s === 'C') return 'Settore C';
+    if (s === 'D') return 'Settore D';
+    if (s === 'E') return 'Settore E';
+    return 'Settore non definito';
+}
+
+function prettyBelt(name) {
+    if (!name) return '';
+    return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+function shuffle(a) {
+    const arr = [...a];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function pickRandom(arr, n) {
+    return shuffle(arr).slice(0, Math.max(0, n));
+}
+
+function toAnswers(correct, wrongs) {
+    const options = shuffle([correct, ...wrongs]);
+    const letters = ['a', 'b', 'c', 'd'];
+    const answers = {};
+    let correctAnswer = 'a';
+    options.forEach((opt, idx) => {
+        answers[letters[idx]] = opt;
+        if (opt === correct) correctAnswer = letters[idx];
+    });
+    return { answers, correctAnswer };
+}
+
+function buildPool() {
+    if (!beltCodes.length) return [];
+
+    const pool = [];
+    const otherCodes = allCodes.filter(c => !beltCodes.includes(c));
+
+    beltCodes.forEach(code => {
+        const sector = suffixToSector(code);
+        const title = TITLES[code] || 'Titolo tecnica non disponibile';
+
+        // Q1: settore del codice
+        {
+            const wrong = ['Settore A', 'Settore B', 'Settore C', 'Settore D', 'Settore E']
+                .filter(s => s !== sector)
+                .slice(0, 3);
+            const { answers, correctAnswer } = toAnswers(sector, wrong);
+            pool.push({
+                question: `Il codice <strong>${code}</strong> appartiene a quale settore?`,
+                answers,
+                correctAnswer
+            });
+        }
+
+        // Q2: titolo -> codice
+        {
+            const sameBeltWrong = beltCodes.filter(c => c !== code);
+            const wrongCodes = pickRandom(sameBeltWrong, 3);
+            const { answers, correctAnswer } = toAnswers(code, wrongCodes);
+            pool.push({
+                question: `Qual è il codice corretto per: <em>${title}</em>?`,
+                answers,
+                correctAnswer
+            });
+        }
+
+        // Q3: appartenenza cintura
+        {
+            const wrongCode = pickRandom(otherCodes, 1)[0] || 'XX';
+            const qTrue = {
+                question: `(V/F) Il codice <strong>${code}</strong> fa parte della cintura ${prettyBelt(belt)}.`,
+                answers: { a: 'Vero', b: 'Falso' },
+                correctAnswer: 'a'
+            };
+            const qFalse = {
+                question: `(V/F) Il codice <strong>${wrongCode}</strong> fa parte della cintura ${prettyBelt(belt)}.`,
+                answers: { a: 'Vero', b: 'Falso' },
+                correctAnswer: 'b'
+            };
+            pool.push(qTrue, qFalse);
+        }
+    });
+
+    return pool;
+}
+
+function buildQuiz() {
+    if (!beltCodes.length) {
+        titleEl.textContent = 'Quiz misto cintura';
+        quizContainer.innerHTML = '<p>Cintura non valida. Torna al menu e scegli una cintura.</p>';
+        submitButton.style.display = 'none';
+        newQuizButton.style.display = 'none';
+        return;
+    }
+
+    titleEl.textContent = `Quiz misto cintura ${prettyBelt(belt)}`;
+    const pool = buildPool();
+    const size = Math.min(QUIZ_SIZE, pool.length);
+    activeQuestions = shuffle(pool).slice(0, size);
+
+    const output = [];
+    activeQuestions.forEach((q, idx) => {
+        const entries = shuffle(Object.entries(q.answers));
+        const answersHtml = entries.map(([key, text]) => (
+            `<label><input type="radio" name="question${idx}" value="${key}"> ${text}</label>`
+        )).join('');
+
+        output.push(`
+            <div class="question" id="question${idx}">
+                <p>${idx + 1}. ${q.question}</p>
+                <div class="answers">${answersHtml}</div>
+            </div>
+        `);
+    });
+
+    quizContainer.innerHTML = output.join('');
+}
+
+function showResults() {
+    const answerContainers = quizContainer.querySelectorAll('.answers');
+    let numCorrect = 0;
+
+    activeQuestions.forEach((q, idx) => {
+        const questionDiv = document.getElementById(`question${idx}`);
+        const answerContainer = answerContainers[idx];
+        const selector = `input[name=question${idx}]:checked`;
+        const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+        questionDiv.classList.remove('correct', 'incorrect');
+        if (userAnswer === q.correctAnswer) {
+            numCorrect++;
+            questionDiv.classList.add('correct');
+        } else {
+            questionDiv.classList.add('incorrect');
+        }
+    });
+
+    resultsContainer.innerHTML = `${numCorrect} su ${activeQuestions.length} risposte corrette.`;
+}
+
+buildQuiz();
+submitButton.addEventListener('click', showResults);
+newQuizButton.addEventListener('click', () => {
+    resultsContainer.textContent = '';
+    buildQuiz();
+});
+</script>
+</body>
+</html>

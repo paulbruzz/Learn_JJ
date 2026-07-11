@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tecnica - Learn Ju-Jitsu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tech-code { font-size: 2rem; font-weight: 800; letter-spacing: 1px; margin: 0; }
+        .tech-title { margin-top: 6px; color: #1f2d3d; }
+        .tech-box { background:#f7f9fc; border:1px solid #dce3ee; border-radius:10px; padding:14px; }
+        .muted { color:#5f6b7a; font-size:0.95rem; }
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .tech-card {
+            background: #ffffff;
+            border: 1px solid #dce3ee;
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .tech-card h3 {
+            margin: 0 0 8px;
+            font-size: 1rem;
+            color: #1f2d3d;
+        }
+        .tech-card ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .tech-meta {
+            display: inline-block;
+            margin: 6px 0 10px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #eaf1ff;
+            color: #294d87;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .related-links {
+            margin-top: 12px;
+        }
+        .related-links a { margin-right: 10px; }
+        .tech-quiz {
+            margin-top: 16px;
+            border: 1px solid #dce3ee;
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 14px;
+        }
+        .tech-quiz h3 {
+            margin: 0 0 8px;
+            color: #1f2d3d;
+        }
+        .tech-quiz .q {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #edf1f6;
+            border-radius: 8px;
+            background: #fbfdff;
+        }
+        .tech-quiz .q p {
+            margin: 0 0 8px;
+            font-weight: 600;
+        }
+        .tech-quiz .q label {
+            display: block;
+            margin: 4px 0;
+        }
+        .tech-quiz-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .quiz-result {
+            margin-top: 10px;
+            font-weight: 700;
+            color: #1f2d3d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Teoria del Ju-Jitsu</h1>
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+
+    <main id="content">
+        <section>
+            <p class="tech-code" id="code">Tecnica</p>
+            <h2 class="tech-title" id="title">Dettaglio tecnica</h2>
+            <p class="tech-meta" id="family">Categoria didattica</p>
+            <div class="tech-box">
+                <p id="snippet"></p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Principi chiave</h3>
+                    <ul id="principles"></ul>
+                </div>
+                <div class="tech-card">
+                    <h3>Errori comuni</h3>
+                    <ul id="mistakes"></ul>
+                </div>
+                <div class="tech-card">
+                    <h3>Sicurezza in allenamento</h3>
+                    <ul id="safety"></ul>
+                </div>
+            </div>
+
+            <div class="related-links" id="related"></div>
+
+            <div class="tech-quiz" id="tech-quiz">
+                <h3>Quiz tecnica</h3>
+                <p class="muted">Domande create in base al codice selezionato.</p>
+                <div id="quiz-tech-container"></div>
+                <div class="tech-quiz-actions">
+                    <button class="button" id="check-tech-quiz" type="button">Correggi quiz</button>
+                    <button class="button" id="new-tech-quiz" type="button">Nuovo quiz tecnica</button>
+                </div>
+                <p id="quiz-tech-result" class="quiz-result"></p>
+            </div>
+
+            <a class="button" href="index.html">Torna al menu</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Learn Ju-Jitsu. Tutti i diritti riservati.</p>
+    </footer>
+
+    <script>
+        const TECH = {
+            "4A": { title: "Contro strangolamento diretto", snippet: "Afferro il keikogi all'altezza della spalla, porto il piede all'interno della guardia e imposto una grande rotazione con sbilanciamento e controllo." },
+            "16A": { title: "Contro presa del bavero", snippet: "Controllo la mano che afferra il bavero, rinforzo la presa con entrambe le mani e applico torsione/compressione progressiva per rompere la presa in sicurezza." },
+            "2B": { title: "Contro pugno diretto - Koshi Guruma", snippet: "Parata, presa alla manica e trazione; entro con il bacino e completo la proiezione d'anca mantenendo il controllo del baricentro." },
+            "17B": { title: "Contro pugno diretto - Tsukuri Goshi", snippet: "Parata interna, avvolgimento del braccio e ingresso d'anca; la spazzata con anca finalizza la proiezione." },
+            "5C": { title: "Contro pugno diretto - Ashi Gatame", snippet: "Parata esterna in avanzamento, presa al polso e serraggio del braccio sotto ascella; controllo con leva progressiva." },
+            "6C": { title: "Contro pugnalata dall'alto - Ude Garami", snippet: "Parata esterna oltre il gomito, controllo del polso armato e costruzione della leva al braccio con passaggio di posizione." },
+            "1D": { title: "Contro pugno diretto - Eri Jime", snippet: "Parata, ingresso e controllo del braccio; la finalizzazione lavora sulla linea del bavero con struttura e postura corrette." },
+            "13D": { title: "Contro pugno diretto - Do Jime", snippet: "Dopo la parata si entra sul lato/posteriore, si controlla l'asse del corpo avversario e si applica compressione/chiusura in sicurezza." },
+            "1E": { title: "Contro strangolamento diretto", snippet: "Si libera la linea centrale con braccio in salita e rotazione, si rompe la presa e si recupera immediatamente una posizione di controllo." },
+            "9E": { title: "Contro pugno diretto", snippet: "Avanzamento angolato, parata interna e controllo del polso con atemi di supporto; prepara transizione a leva/proiezione." },
+
+            "2A": { title: "Contro pugno diretto", snippet: "Parata esterna in avanzamento, presa al polso e torsione del palmo verso il basso con compressione dell'avambraccio." },
+            "13A": { title: "Contro pugnalata dall'alto", snippet: "Ingresso deciso con parata oltre il gomito, presa del polso armato e doppia azione di torsione/trazione per il controllo." },
+            "3B": { title: "Contro pugno diretto - Seoi Nage", snippet: "Preparazione simile a O-Goshi ma con meccanica di spalla; trazione della manica e ingresso sotto il centro avversario." },
+            "10B": { title: "Contro pugno diretto - Hidari Ippon Seoi", snippet: "Parata esterna efficace, spostamento per allineare il baricentro e caricamento su spalla con controllo delle braccia." },
+            "2C": { title: "Contro pugno diretto - Hiza Gatame", snippet: "Parata esterna, presa al polso e avvolgimento; pressione diretta al braccio con linea di leva stabile." },
+            "3C": { title: "Contro pugnalata dal basso - Ashi Katame", snippet: "Spostamento laterale, parata esterna, presa del polso e sbarramento di gamba per bloccare struttura e mobilità." },
+            "3D": { title: "Contro pugno diretto - Nami Juji Jime", snippet: "Ingresso con avambracci in linea, presa a croce sul bavero e chiusura progressiva mantenendo controllo posturale." },
+            "2E": { title: "Contro pugnalata dall'alto", snippet: "Parata di accoglimento, controllo a mani incrociate e leva sul polso in estensione con sbilanciamento." },
+            "3E": { title: "Contro pugno diretto", snippet: "Parata interna in arretramento, doppia presa ai baveri e chiusura strutturata tipo kata juji jime." },
+            "4E": { title: "Contro strangolamento diretto", snippet: "Scatto con avambracci sotto le braccia avversarie per rompere la presa e aprire la linea centrale." },
+
+            "1A": { title: "Contro pugno diretto", snippet: "Parata interna anticipata, avvolgimento del braccio e controllo del gomito/polso con rotazione del corpo." },
+            "7A": { title: "Contro pugno diretto", snippet: "Parata interna, presa al polso e torsione accentuata passando sotto l'ascella per completare la leva." },
+            "9A": { title: "Contro estrazione arma cintura", snippet: "Ingresso immediato su linea laterale, controllo ascellare e azione al collo con unione delle mani e leva." },
+            "17A": { title: "Contro calcio", snippet: "Parata all'altezza del ginocchio, spostamento in senso antiorario e chiusura della gamba in ascella con controllo." },
+            "1B": { title: "Contro pugno diretto - Ippon Seoi Nage", snippet: "Ingresso fluido senza opporre forza, trazione di manica e caricamento su spalla per la proiezione." },
+            "4B": { title: "Contro pugno diretto - Uki Goshi", snippet: "Parata interna, controllo del polso e inserimento dell'anca con rotazione per proiettare." },
+            "17C": { title: "Contro pugnalata dal basso - Kata Gatame in Kesa", snippet: "Parata interna con controllo del polso, colpi di distrazione su avambraccio/tricipite e passaggio a immobilizzazione." },
+            "18C": { title: "Contro pistola al torace - Ude Ushiro Waki Gatame", snippet: "Rotazione fuori linea, presa al polso armato con due mani e salita di controllo per leva posteriore." },
+            "7E": { title: "Contro strangolamento diretto", snippet: "Avanzamento in parallelo, presa del polso e azione di gomito sull'avambraccio per rompere la presa e rientrare in controllo." },
+            "14E": { title: "Contro pugno diretto", snippet: "Parata esterna in avanzamento, rotazione ampia del braccio avversario e presa alle dita per leva di controllo." },
+
+            "8A": { title: "Contro strangolamento diretto", snippet: "Doppia presa alle maniche (kumi kata), ampia rotazione antioraria e sbilanciamento progressivo." },
+            "18A": { title: "Contro strangolamento diretto - Uki Waza", snippet: "Presa bavero/manica, invito al passo e ingresso in sutemi laterale con controllo della traiettoria." },
+            "12B": { title: "Contro pugno diretto - Hane Goshi", snippet: "Avvolgimento del braccio, presa al keikogi e ingresso d'anca con meccanica di hane goshi." },
+            "15B": { title: "Contro pugno diretto - Kata Guruma", snippet: "Parata interna, presa al keikogi e ingresso tra le gambe per caricamento sulle spalle." },
+            "16B": { title: "Contro avvolgimento del collo - O Seoi Otoshi", snippet: "Allontanamento dell'anca avversaria, presa al polso e ingresso con abbassamento per proiezione di braccia." },
+            "8C": { title: "Contro pugno diretto - Ushiro Waki Gatame", snippet: "Parata esterna, presa al polso e avvolgimento sotto ascella con sbilanciamento controllato." },
+            "9C": { title: "Contro pugno diretto - Hara Gatame", snippet: "Parata esterna in uscita laterale, presa al polso e controllo della cintura/centro per leva." },
+            "10C": { title: "Contro pugnalata dall'alto - Waki Gatame in Kesa", snippet: "Parata esterna, presa del polso armato e sbarramento in rotazione con passaggio a controllo a terra." },
+            "13C": { title: "Contro strangolamento diretto - Juji Garami", snippet: "Controllo delle mani avversarie, passaggi incrociati delle braccia e costruzione della leva." },
+            "15C": { title: "Contro calcio frontale - Ashi Ishigi", snippet: "Spostamento laterale, parata e chiusura della gamba in ascella con controllo dalla caviglia." },
+
+            "5A": { title: "Contro attacco a distanza", snippet: "Gestione della distanza con ingresso in diagonale e controllo del tempo d'anticipo. L'obiettivo è interrompere la linea offensiva prima dell'impatto, mantenendo struttura e guardia." },
+            "12A": { title: "Contro attacco a distanza", snippet: "Avvicinamento controllato con azione esplosiva coordinata tra passo, anche e presa. La finalizzazione avviene in avanzamento, mantenendo continuità di controllo sull'asse avversario." },
+            "15A": { title: "Contro pugno diretto", snippet: "Parata esterna in avanzamento, presa al polso e torsione ampia del braccio per forzare la postura." },
+            "8B": { title: "Contro avvolgimento in vita alle spalle - Goshi Kubi Nage", snippet: "Si agevola l'avvolgimento per creare varco, poi si imposta leva su collo/anca e proiezione." },
+            "11B": { title: "Contro attacco diretto - transizione in Tomoe Nage", snippet: "Parata e controllo iniziale per spezzare il ritmo dell'attacco, poi ingresso in sacrificio con appoggio del piede sul centro avversario. La proiezione si completa guidando la traiettoria in sicurezza e mantenendo il controllo fino alla caduta." },
+            "14B": { title: "Contro fendente lato sinistro - Harai Goshi", snippet: "Parata interna su attacco laterale, presa al keikogi e ingresso d'anca per spazzata." },
+            "20B": { title: "Contro fendente lato sinistro - Age Harai Goshi", snippet: "Parata interna, doppia presa (gomito/bavero) e proiezione d'anca in avanzamento." },
+            "1C": { title: "Contro pugno diretto", snippet: "Parata esterna in avanzamento, presa al polso e controllo con colpo di supporto al braccio." },
+            "16C": { title: "Contro calcio frontale - Hiza Eri Gatame", snippet: "Parata alla tibia/caviglia in retrocedere, presa al tallone e applicazione della leva con controllo del ginocchio." },
+            "20E": { title: "Contro strangolamento alle spalle", snippet: "Sollevo le braccia, imposto presa sui metacarpi e ruoto i polsi all'esterno con passo indietro per liberazione." }
+        };
+
+        function suffix(code) {
+            return (code || '').slice(-1);
+        }
+
+        function getFamilyByCode(code) {
+            const s = suffix(code);
+            if (s === 'A') return 'Settore A • Controlli e difese iniziali';
+            if (s === 'B') return 'Settore B • Proiezioni e squilibri dinamici';
+            if (s === 'C') return 'Settore C • Leve e immobilizzazioni';
+            if (s === 'D') return 'Settore D • Strangolamenti e controlli al collo';
+            if (s === 'E') return 'Settore E • Difese avanzate e liberazioni';
+            return 'Categoria non classificata';
+        }
+
+        function getLearningPack(code, title) {
+            const s = suffix(code);
+            const t = (title || '').toLowerCase();
+            const hasKnife = t.includes('pugnalata') || t.includes('fendente');
+            const hasKick = t.includes('calcio');
+            const hasStrangle = t.includes('strangolamento') || t.includes('jime');
+
+            const base = {
+                principles: [
+                    'Mantenere postura stabile e baricentro sotto controllo.',
+                    'Lavorare su angolo e tempo, non su forza contro forza.',
+                    'Concludere la tecnica mantenendo continuità di controllo.'
+                ],
+                mistakes: [
+                    'Entrare troppo frontalmente senza togliersi dalla linea di attacco.',
+                    'Bloccare il respiro e irrigidire spalle e braccia.',
+                    'Perdere il controllo dell\'arto avversario nella fase finale.'
+                ],
+                safety: [
+                    'Applicare la pressione in modo progressivo e comunicare col partner.',
+                    'Interrompere subito su segnale di resa o discomfort.',
+                    'Curare sempre la caduta/atterraggio del compagno nelle proiezioni.'
+                ],
+                related: [
+                    { href: 'spostamenti_teoria.html', label: 'Spostamenti' },
+                    { href: 'parate_teoria.html', label: 'Parate' }
+                ]
+            };
+
+            if (s === 'B') {
+                base.principles[0] = 'Creare prima il kuzushi (squilibrio), poi entrare con il corpo.';
+                base.mistakes[0] = 'Entrare per proiettare senza aver rotto equilibrio e postura avversaria.';
+                base.related = [
+                    { href: 'proiezioni_teoria.html', label: 'Proiezioni' },
+                    { href: 'cadute_teoria.html', label: 'Cadute' }
+                ];
+            }
+            if (s === 'C') {
+                base.principles[0] = 'Allineare fulcro, direzione e controllo del polso/gomito/spalla.';
+                base.mistakes[0] = 'Forzare la leva in modo brusco invece di costruirla progressivamente.';
+                base.related = [
+                    { href: 'leve_teoria.html', label: 'Leve articolari' },
+                    { href: 'immobilizzazioni_teoria.html', label: 'Immobilizzazioni' }
+                ];
+            }
+            if (s === 'D') {
+                base.principles[0] = 'Posizionare bene spalle e avambracci per una chiusura tecnica pulita.';
+                base.mistakes[0] = 'Stringere solo con le braccia senza struttura del tronco.';
+                base.related = [
+                    { href: 'strangolamenti_teoria.html', label: 'Strangolamenti' },
+                    { href: 'parate_teoria.html', label: 'Parate' }
+                ];
+            }
+            if (s === 'E') {
+                base.principles[0] = 'Rompere la presa con traiettoria breve e ritorno immediato in guardia.';
+                base.mistakes[0] = 'Liberarsi senza controllo finale, lasciando spazio a una nuova presa.';
+                base.related = [
+                    { href: 'saluto_teoria.html', label: 'Disciplina e controllo' },
+                    { href: 'spostamenti_teoria.html', label: 'Spostamenti' }
+                ];
+            }
+
+            if (hasKnife) {
+                base.safety.unshift('Allenare attacchi con arma simulata in modo lento e codificato.');
+            }
+            if (hasKick) {
+                base.principles.unshift('Gestire distanza e timing prima del contatto sulla gamba.');
+            }
+            if (hasStrangle) {
+                base.safety.unshift('Nei controlli al collo, rilasciare immediatamente al tap del partner.');
+            }
+
+            return base;
+        }
+
+        function getDidacticFocus(code, title) {
+            const s = suffix(code);
+            const t = (title || '').toLowerCase();
+            const notes = [];
+
+            if (s === 'A') notes.push('priorità a tempo di ingresso e gestione della distanza');
+            if (s === 'B') notes.push('priorità a kuzushi, entrata e direzione della proiezione');
+            if (s === 'C') notes.push('priorità ad allineamento di leva e controllo progressivo');
+            if (s === 'D') notes.push('priorità a struttura del tronco e chiusura tecnica controllata');
+            if (s === 'E') notes.push('priorità a liberazione rapida e consolidamento finale del controllo');
+
+            if (t.includes('pugnalata') || t.includes('fendente')) {
+                notes.push('lavoro sempre codificato e progressivo nelle simulazioni con arma');
+            }
+            if (t.includes('calcio')) {
+                notes.push('lettura del timing della gamba e uscita dalla linea d\'attacco');
+            }
+            if (t.includes('strangolamento') || t.includes('jime')) {
+                notes.push('attenzione massima alla sicurezza del collo e rilascio immediato al segnale');
+            }
+
+            return notes;
+        }
+
+        function buildExtendedSnippet(code, data) {
+            const focus = getDidacticFocus(code, data.title);
+            if (!focus.length) return data.snippet;
+            return `${data.snippet} Focus didattico: ${focus.join('; ')}.`;
+        }
+
+        function fillList(el, items) {
+            if (!el) return;
+            el.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+        }
+
+        function fillRelated(el, links) {
+            if (!el) return;
+            const html = links.map(l => `<a href="${l.href}">${l.label}</a>`).join('');
+            el.innerHTML = `<strong>Approfondisci:</strong> ${html}`;
+        }
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function unique(arr) {
+            return [...new Set(arr)];
+        }
+
+        function buildTechniqueQuiz(code, data, pack, familyLabel) {
+            const familyOptions = [
+                'Settore A • Controlli e difese iniziali',
+                'Settore B • Proiezioni e squilibri dinamici',
+                'Settore C • Leve e immobilizzazioni',
+                'Settore D • Strangolamenti e controlli al collo',
+                'Settore E • Difese avanzate e liberazioni'
+            ];
+
+            const title = data.title || '';
+            const snippet = data.snippet || '';
+            const firstRelated = (pack.related[0] && pack.related[0].label) || 'Spostamenti';
+
+            const q1 = {
+                text: `La tecnica ${code} appartiene a quale settore?`,
+                options: shuffle(unique([familyLabel, ...familyOptions.filter(f => f !== familyLabel).slice(0, 3)])),
+                correct: familyLabel
+            };
+
+            const principle = pack.principles[0];
+            const wrongPrinciples = [
+                'Usare sempre forza massima senza curare timing e postura.',
+                'Restare fermi sulla linea di attacco per aumentare stabilità.',
+                'Ignorare il controllo finale una volta iniziata la tecnica.'
+            ];
+            const q2 = {
+                text: `Qual è un principio chiave per ${code}?`,
+                options: shuffle(unique([principle, ...wrongPrinciples.slice(0, 3)])),
+                correct: principle
+            };
+
+            const mistake = pack.mistakes[0];
+            const q3 = {
+                text: `Quale tra queste è indicata come errore comune per ${code}?`,
+                options: shuffle(unique([
+                    mistake,
+                    'Mantenere il baricentro stabile durante tutta l\'azione.',
+                    'Applicare pressione progressiva rispettando il partner.',
+                    'Concludere la tecnica con controllo posturale.'
+                ])),
+                correct: mistake
+            };
+
+            const safety = pack.safety[0];
+            const q4 = {
+                text: `Qual è la regola di sicurezza più adatta a ${code}?`,
+                options: shuffle(unique([
+                    safety,
+                    'Accelerare sempre la finalizzazione per renderla più realistica.',
+                    'Evitare comunicazione col partner per migliorare il riflesso.',
+                    'Bloccare il respiro nella fase di applicazione della tecnica.'
+                ])),
+                correct: safety
+            };
+
+            const q5 = {
+                text: `Per approfondire ${code}, quale pagina teoria è più collegata?`,
+                options: shuffle(unique([
+                    firstRelated,
+                    'Storia',
+                    'Parti del judogi',
+                    'Saluto'
+                ])),
+                correct: firstRelated
+            };
+
+            const all = [q1, q2, q3, q4, q5];
+            return shuffle(all);
+        }
+
+        function renderTechniqueQuiz(questions) {
+            const container = document.getElementById('quiz-tech-container');
+            const result = document.getElementById('quiz-tech-result');
+            if (!container) return;
+
+            result.textContent = '';
+            container.innerHTML = questions.map((q, idx) => {
+                const name = `tech-q-${idx}`;
+                const answers = q.options.map(opt => {
+                    return `<label><input type="radio" name="${name}" value="${opt}"> ${opt}</label>`;
+                }).join('');
+                return `<div class="q" data-index="${idx}"><p>${idx + 1}. ${q.text}</p>${answers}</div>`;
+            }).join('');
+        }
+
+        function bindTechniqueQuizActions(getQuestions) {
+            const checkBtn = document.getElementById('check-tech-quiz');
+            const newBtn = document.getElementById('new-tech-quiz');
+            const result = document.getElementById('quiz-tech-result');
+
+            if (!checkBtn || !newBtn || !result) return;
+
+            checkBtn.onclick = () => {
+                const questions = getQuestions();
+                let score = 0;
+                questions.forEach((q, idx) => {
+                    const selected = document.querySelector(`input[name="tech-q-${idx}"]:checked`);
+                    if (selected && selected.value === q.correct) score += 1;
+                });
+                result.textContent = `Risultato: ${score}/${questions.length}`;
+            };
+
+            newBtn.onclick = () => {
+                const questions = getQuestions(true);
+                renderTechniqueQuiz(questions);
+                result.textContent = '';
+            };
+        }
+
+        const code = (new URLSearchParams(location.search).get('c') || '').toUpperCase();
+        const data = TECH[code];
+        const codeEl = document.getElementById('code');
+        const titleEl = document.getElementById('title');
+        const snEl = document.getElementById('snippet');
+        const familyEl = document.getElementById('family');
+        const principlesEl = document.getElementById('principles');
+        const mistakesEl = document.getElementById('mistakes');
+        const safetyEl = document.getElementById('safety');
+        const relatedEl = document.getElementById('related');
+        const quizBoxEl = document.getElementById('tech-quiz');
+
+        let currentTechQuiz = [];
+        const getQuizQuestions = (regenerate = false) => {
+            if (regenerate && code && data) {
+                const family = getFamilyByCode(code);
+                const pack = getLearningPack(code, data.title);
+                currentTechQuiz = buildTechniqueQuiz(code, data, pack, family);
+            }
+            return currentTechQuiz;
+        };
+
+        if (!code || !data) {
+            codeEl.textContent = 'Codice non trovato';
+            titleEl.textContent = 'Tecnica non disponibile';
+            snEl.textContent = 'Codice assente o non ancora mappato. Torna al menu e seleziona un codice valido.';
+            familyEl.textContent = 'Categoria non disponibile';
+            fillList(principlesEl, ['Seleziona un codice valido dal menu principale.']);
+            fillList(mistakesEl, ['Nessun dato disponibile senza codice tecnica.']);
+            fillList(safetyEl, ['Allenarsi sempre con supervisione e controllo.']);
+            fillRelated(relatedEl, [{ href: 'index.html', label: 'Torna al menu' }]);
+            if (quizBoxEl) {
+                quizBoxEl.style.display = 'none';
+            }
+        } else {
+            const pack = getLearningPack(code, data.title);
+            codeEl.textContent = code;
+            titleEl.textContent = data.title;
+            snEl.textContent = buildExtendedSnippet(code, data);
+            familyEl.textContent = getFamilyByCode(code);
+            fillList(principlesEl, pack.principles);
+            fillList(mistakesEl, pack.mistakes);
+            fillList(safetyEl, pack.safety);
+            fillRelated(relatedEl, pack.related);
+
+            currentTechQuiz = buildTechniqueQuiz(code, data, pack, getFamilyByCode(code));
+            renderTechniqueQuiz(currentTechQuiz);
+            bindTechniqueQuizActions(getQuizQuestions);
+            document.title = `${code} - Learn Ju-Jitsu`;
+        }
+    </script>
+</body>
+</html>

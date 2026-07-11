@@ -27,6 +27,7 @@
         <h2>Quiz: Judogi</h2>
         <div id="quiz-container" class="quiz-container"></div>
         <button id="submit-quiz" class="button">Invia Risposte</button>
+        <button id="new-quiz" class="button" type="button">Nuovo quiz casuale</button>
         <div id="results"></div>
     </section>
 </main>
@@ -35,22 +36,30 @@
 const quizContainer=document.getElementById('quiz-container');
 const resultsContainer=document.getElementById('results');
 const submitButton=document.getElementById('submit-quiz');
+const newQuizButton=document.getElementById('new-quiz');
+const RANDOM_QUIZ_SIZE=10;
+let activeQuestions=[];
 
 const myQuestions=[
     { question: "Qual &egrave; il termine giapponese per la giacca del judogi?", answers: { a: "Zubon", b: "Uwagi", c: "Eri" }, correctAnswer: "b" },
     { question: "Cos'&egrave; <i>eri</i> nel <i>judogi</i>?", answers: { a: "La caviglia", b: "Il colletto", c: "La manica" }, correctAnswer: "b" },
     { question: "Cosa indica <i>zubon</i>?", answers: { a: "I pantaloni", b: "La giacca", c: "Il colletto" }, correctAnswer: "a" },
     { question: "Il termine <i>ashi</i> si riferisce a quale parte del corpo?", answers: { a: "La mano", b: "La gamba", c: "La testa" }, correctAnswer: "b" },
-    { question: "Per quale parte &egrave; nota la <i>sodeguchi</i>?", answers: { a: "L'apertura della manica", b: "Il ginocchio", c: "L'anca" }, correctAnswer: "a" }
+    { question: "Per quale parte &egrave; nota la <i>sodeguchi</i>?", answers: { a: "L'apertura della manica", b: "Il ginocchio", c: "L'anca" }, correctAnswer: "a" },
+    { question: "<i>Musubi</i> indica:", answers: { a: "Il nodo della cintura", b: "La cucitura della manica", c: "La falciata esterna" }, correctAnswer: "a" },
+    { question: "Nel contesto del judogi, <i>sode</i> significa:", answers: { a: "Bavero", b: "Manica", c: "Caviglia" }, correctAnswer: "b" },
+    { question: "Qual &egrave; una funzione tecnica dell'<i>eri</i> (bavero)?", answers: { a: "Solo estetica", b: "Controllo e gestione dell'avversario", c: "Misurare la distanza col piede" }, correctAnswer: "b" },
+    { question: "Perch&eacute; &egrave; importante mantenere il judogi in ordine durante l'allenamento?", answers: { a: "Per ridurre prese scorrette e rendere la pratica pi&ugrave; sicura", b: "Per aumentare la velocit&agrave; dei calci", c: "Per memorizzare i nomi giapponesi" }, correctAnswer: "a" }
 ];
+const questionPool=myQuestions.slice();
 
 function shuffle(a){ let c=a.length,r; while(c){ r=Math.floor(Math.random()*c); c--; [a[c],a[r]]=[a[r],a[c]];} return a; }
 
-function buildQuiz(){ const output=[]; myQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
+function buildQuiz(){ const output=[]; const maxN=Math.min(RANDOM_QUIZ_SIZE,questionPool.length),minN=Math.min(8,maxN),n=Math.floor(Math.random()*(maxN-minN+1))+minN; activeQuestions=shuffle(questionPool.slice()).slice(0,n); activeQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
 
-function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; myQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${myQuestions.length} risposte corrette.`; }
+function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; activeQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${activeQuestions.length} risposte corrette.`; }
 
-buildQuiz(); submitButton.addEventListener('click',showResults);
+buildQuiz(); submitButton.addEventListener('click',showResults); newQuizButton.addEventListener('click',()=>{ resultsContainer.textContent=''; buildQuiz(); });
 </script>
 </body>
 </html>

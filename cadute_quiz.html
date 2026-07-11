@@ -27,6 +27,7 @@
         <h2>Quiz: Cadute (<i>Ukemi Waza</i>)</h2>
         <div id="quiz-container" class="quiz-container"></div>
         <button id="submit-quiz" class="button">Invia Risposte</button>
+        <button id="new-quiz" class="button" type="button">Nuovo quiz casuale</button>
         <div id="results"></div>
     </section>
 </main>
@@ -35,26 +36,46 @@
 const quizContainer = document.getElementById('quiz-container');
 const resultsContainer = document.getElementById('results');
 const submitButton = document.getElementById('submit-quiz');
+const newQuizButton = document.getElementById('new-quiz');
+const RANDOM_QUIZ_SIZE = 10;
+let activeQuestions = [];
 
 const myQuestions = [
-    { question: "Qual &egrave; lo scopo principale delle <i>ukemi waza</i>?",
-      answers: { a: "Imparare a cadere proteggendo il corpo", b: "Colpire l'avversario", c: "Aumentare la forza" },
-      correctAnswer: "a" },
-    { question: "La <i>Zempo Kaiten Mae Ukemi</i> &egrave; una caduta:",
-      answers: { a: "All'indietro", b: "In avanti con rotolamento", c: "Laterale" },
-      correctAnswer: "b" },
-    { question: "Nella <i>Ushiro Ukemi</i> cosa &egrave; importante proteggere?",
-      answers: { a: "Le ginocchia", b: "La testa e il collo", c: "Le dita" },
-      correctAnswer: "b" }
+        { question: "Qual &egrave; lo scopo principale delle <i>ukemi waza</i>?",
+            answers: { a: "Imparare a cadere proteggendo il corpo", b: "Colpire l'avversario", c: "Aumentare la forza" },
+            correctAnswer: "a" },
+        { question: "La <i>Zempo Kaiten Mae Ukemi</i> &egrave; una caduta:",
+            answers: { a: "All'indietro", b: "In avanti con rotolamento", c: "Laterale" },
+            correctAnswer: "b" },
+        { question: "Nella <i>Ushiro Ukemi</i> cosa &egrave; importante proteggere?",
+            answers: { a: "Le ginocchia", b: "La testa e il collo", c: "Le dita" },
+            correctAnswer: "b" },
+        { question: "Il termine <i>migi</i> indica:",
+            answers: { a: "Sinistra", b: "Avanti", c: "Destra" },
+            correctAnswer: "c" },
+        { question: "La <i>Yoko Ukemi</i> &egrave; usata quando lo sbilanciamento avviene:",
+            answers: { a: "Di lato", b: "Solo in avanti", c: "Solo in salto" },
+            correctAnswer: "a" },
+        { question: "Nella caduta all'indietro il battito delle braccia serve a:",
+            answers: { a: "Decorare il movimento", b: "Dissipare l'impatto", c: "Aumentare la velocit&agrave; di caduta" },
+            correctAnswer: "b" },
+        { question: "La <i>Mae Ukemi Chugairi</i> allena soprattutto:",
+            answers: { a: "Solo la forza delle braccia", b: "Caduta e recupero rapido della posizione", c: "Una presa al collo" },
+            correctAnswer: "b" },
+        { question: "Quale principio &egrave; corretto nelle ukemi?",
+            answers: { a: "Impattare rigidamente", b: "Distribuire il contatto e mantenere controllo", c: "Guardare in alto durante ogni caduta" },
+            correctAnswer: "b" }
 ];
+const questionPool=myQuestions.slice();
 
 function shuffle(array){ let current=array.length, rand; while(current){ rand=Math.floor(Math.random()*current); current--; [array[current],array[rand]]=[array[rand],array[current]];} return array; }
 
-function buildQuiz(){ const output=[]; myQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,text] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${text}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(input=>{ input.addEventListener('change', e=>{ const qdiv=e.target.closest('.question'); if(qdiv){ qdiv.classList.remove('correct','incorrect'); } resultsContainer.textContent=''; }); }); }
+function buildQuiz(){ const output=[]; const maxN=Math.min(RANDOM_QUIZ_SIZE,questionPool.length),minN=Math.min(8,maxN),n=Math.floor(Math.random()*(maxN-minN+1))+minN; activeQuestions=shuffle(questionPool.slice()).slice(0,n); activeQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,text] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${text}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(input=>{ input.addEventListener('change', e=>{ const qdiv=e.target.closest('.question'); if(qdiv){ qdiv.classList.remove('correct','incorrect'); } resultsContainer.textContent=''; }); }); }
 
-function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; myQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const selector=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(selector)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${myQuestions.length} risposte corrette.`; }
+function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; activeQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const selector=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(selector)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${activeQuestions.length} risposte corrette.`; }
 
 buildQuiz(); submitButton.addEventListener('click', showResults);
+newQuizButton.addEventListener('click', ()=>{ resultsContainer.textContent=''; buildQuiz(); });
 </script>
 </body>
 </html>

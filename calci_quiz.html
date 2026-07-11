@@ -27,6 +27,7 @@
         <h2>Quiz: Calci (<i>Geri Waza</i>)</h2>
         <div id="quiz-container" class="quiz-container"></div>
         <button id="submit-quiz" class="button">Invia Risposte</button>
+        <button id="new-quiz" class="button" type="button">Nuovo quiz casuale</button>
         <div id="results"></div>
     </section>
 </main>
@@ -35,15 +36,26 @@
 const quizContainer=document.getElementById('quiz-container');
 const resultsContainer=document.getElementById('results');
 const submitButton=document.getElementById('submit-quiz');
+const newQuizButton=document.getElementById('new-quiz');
+const RANDOM_QUIZ_SIZE=10;
+let activeQuestions=[];
 const myQuestions=[
     { question: "Il <i>Mae Geri</i> &egrave;:", answers: { a: "Un calcio frontale", b: "Un colpo con il gomito", c: "Una presa" }, correctAnswer: "a" },
     { question: "Il <i>Mawashi Geri</i> &egrave;:", answers: { a: "Un calcio circolare", b: "Un salto", c: "Una leva articolare" }, correctAnswer: "a" },
-    { question: "Il <i>Tobi Geri</i> indica:", answers: { a: "Un calcio saltato", b: "Una caduta laterale", c: "Una parata" }, correctAnswer: "a" }
+    { question: "Il <i>Tobi Geri</i> indica:", answers: { a: "Un calcio saltato", b: "Una caduta laterale", c: "Una parata" }, correctAnswer: "a" },
+    { question: "Nel <i>Mae Geri</i> la versione <i>keage</i> &egrave;:", answers: { a: "Frustata rapida", b: "Solo difensiva", c: "Una proiezione" }, correctAnswer: "a" },
+    { question: "Nel <i>Mae Geri</i> la versione <i>kekomi</i> &egrave;:", answers: { a: "Di spinta", b: "A mani nude", c: "In ginocchio" }, correctAnswer: "a" },
+    { question: "Lo <i>Yoko Geri</i> &egrave; un calcio:", answers: { a: "Laterale", b: "Indietro", c: "Discendente" }, correctAnswer: "a" },
+    { question: "La <i>Hiza Geri</i> &egrave;:", answers: { a: "Una ginocchiata di corta distanza", b: "Una presa al bavero", c: "Una parata bassa" }, correctAnswer: "a" },
+    { question: "L'<i>Ushiro Geri</i> &egrave;:", answers: { a: "Un calcio all'indietro", b: "Una leva", c: "Un colpo di gomito" }, correctAnswer: "a" },
+    { question: "La <i>Mika Zuki Geri</i> pu&ograve; essere usata anche per:", answers: { a: "Deviare o abbassare un braccio", b: "Immobilizzare da montata", c: "Fare <i>za rei</i>" }, correctAnswer: "a" },
+    { question: "Nelle <i>geri waza</i> un principio chiave &egrave;:", answers: { a: "Solo forza bruta", b: "Equilibrio e controllo del centro", c: "Nessun rientro della gamba" }, correctAnswer: "b" }
 ];
+const questionPool=myQuestions.slice();
 function shuffle(a){ let c=a.length,r; while(c){ r=Math.floor(Math.random()*c); c--; [a[c],a[r]]=[a[r],a[c]];} return a; }
-function buildQuiz(){ const output=[]; myQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
-function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; myQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${myQuestions.length} risposte corrette.`; }
-buildQuiz(); submitButton.addEventListener('click',showResults);
+function buildQuiz(){ const output=[]; const maxN=Math.min(RANDOM_QUIZ_SIZE,questionPool.length),minN=Math.min(8,maxN),n=Math.floor(Math.random()*(maxN-minN+1))+minN; activeQuestions=shuffle(questionPool.slice()).slice(0,n); activeQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
+function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; activeQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${activeQuestions.length} risposte corrette.`; }
+buildQuiz(); submitButton.addEventListener('click',showResults); newQuizButton.addEventListener('click',()=>{ resultsContainer.textContent=''; buildQuiz(); });
 </script>
 </body>
 </html>

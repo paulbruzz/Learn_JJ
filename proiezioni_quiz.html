@@ -27,6 +27,7 @@
         <h2>Quiz: Proiezioni (<i>Nage Waza</i>)</h2>
         <div id="quiz-container" class="quiz-container"></div>
         <button id="submit-quiz" class="button">Invia Risposte</button>
+        <button id="new-quiz" class="button" type="button">Nuovo quiz casuale</button>
         <div id="results"></div>
     </section>
 </main>
@@ -35,15 +36,26 @@
 const quizContainer=document.getElementById('quiz-container');
 const resultsContainer=document.getElementById('results');
 const submitButton=document.getElementById('submit-quiz');
+const newQuizButton=document.getElementById('new-quiz');
+const RANDOM_QUIZ_SIZE=10;
+let activeQuestions=[];
 const myQuestions=[
-    { question: "Il cuore delle <i>nage waza</i> &egrave;:", answers: { a: "La forza muscolare", b: "Lo squilibrio (<i>kuzushi</i>)", c: "La velocit&agrave; del calci" }, correctAnswer: "b" },
+    { question: "Il cuore delle <i>nage waza</i> &egrave;:", answers: { a: "La forza muscolare", b: "Lo squilibrio (<i>kuzushi</i>)", c: "La velocit&agrave; dei calci" }, correctAnswer: "b" },
     { question: "Il <i>De Ashi Barai</i> &egrave;:", answers: { a: "Una spazzata del piede avanzato", b: "Un tipo di parata", c: "Una presa al polso" }, correctAnswer: "a" },
-    { question: "L'<i>Uchi Mata</i> agisce principalmente su quale parte?", answers: { a: "La spalla", b: "La gamba interna dell'avversario", c: "Il collo" }, correctAnswer: "b" }
+    { question: "L'<i>Uchi Mata</i> agisce principalmente su quale parte?", answers: { a: "La spalla", b: "La gamba interna dell'avversario", c: "Il collo" }, correctAnswer: "b" },
+    { question: "L'<i>Hiza Guruma</i> &egrave; definita come:", answers: { a: "Ruota sul ginocchio", b: "Parata alta", c: "Caduta all'indietro" }, correctAnswer: "a" },
+    { question: "L'<i>O Soto Gari</i> &egrave;:", answers: { a: "Grande falciata esterna", b: "Leva al polso", c: "Calcio saltato" }, correctAnswer: "a" },
+    { question: "Quale tecnica appartiene alle proiezioni d'anca?", answers: { a: "O Goshi", b: "Age Uke", c: "Kote Gaeshi" }, correctAnswer: "a" },
+    { question: "L'<i>Ippon Seoi Nage</i> &egrave; una proiezione di:", answers: { a: "Spalla", b: "Ginocchio", c: "Polso" }, correctAnswer: "a" },
+    { question: "Il <i>Tai Otoshi</i> si basa su:", answers: { a: "Sbilanciamento e blocco senza sollevamento", b: "Solo sollevamento verticale", c: "Compressione del tronco" }, correctAnswer: "a" },
+    { question: "Il <i>Tomoe Nage</i> &egrave; una tecnica:", answers: { a: "Di sacrificio (<i>sutemi waza</i>)", b: "Di parata", c: "Di saluto" }, correctAnswer: "a" },
+    { question: "Nell'<i>Iriminage</i> il principio chiave &egrave;:", answers: { a: "Entrare nella linea avversaria e guidarne l'energia", b: "Bloccare frontalmente", c: "Usare solo le braccia" }, correctAnswer: "a" }
 ];
+const questionPool=myQuestions.slice();
 function shuffle(a){ let c=a.length,r; while(c){ r=Math.floor(Math.random()*c); c--; [a[c],a[r]]=[a[r],a[c]];} return a; }
-function buildQuiz(){ const output=[]; myQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
-function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; myQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${myQuestions.length} risposte corrette.`; }
-buildQuiz(); submitButton.addEventListener('click',showResults);
+function buildQuiz(){ const output=[]; const maxN=Math.min(RANDOM_QUIZ_SIZE,questionPool.length),minN=Math.min(8,maxN),n=Math.floor(Math.random()*(maxN-minN+1))+minN; activeQuestions=shuffle(questionPool.slice()).slice(0,n); activeQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
+function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; activeQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${activeQuestions.length} risposte corrette.`; }
+buildQuiz(); submitButton.addEventListener('click',showResults); newQuizButton.addEventListener('click',()=>{ resultsContainer.textContent=''; buildQuiz(); });
 </script>
 </body>
 </html>

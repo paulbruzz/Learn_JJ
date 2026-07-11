@@ -63,6 +63,7 @@
             <h2>Quiz: Saluto</h2>
             <div id="quiz-container" class="quiz-container"></div>
             <button id="submit-quiz" class="button">Invia Risposte</button>
+            <button id="new-quiz" class="button" type="button">Nuovo quiz casuale</button>
             <div id="results"></div>
         </section>
     </main>
@@ -75,19 +76,22 @@
         const quizContainer = document.getElementById('quiz-container');
         const resultsContainer = document.getElementById('results');
         const submitButton = document.getElementById('submit-quiz');
+        const newQuizButton = document.getElementById('new-quiz');
+        const RANDOM_QUIZ_SIZE = 10;
+        let activeQuestions = [];
 
         const myQuestions = [
             {
-                question: "Cosa rappresenta il 'Rei' nel Ju-Jitsu?",
+                question: "Cosa rappresenta il <i>rei</i> nel Ju-Jitsu?",
                 answers: {
                     a: "Una tecnica di calcio",
-                    b: "Il saluto, un'espressione di rispetto",
+                    b: "Il saluto come espressione di rispetto e presenza",
                     c: "Una leva articolare"
                 },
                 correctAnswer: "b"
             },
             {
-                question: "Come si esegue il 'Ritsu Rei'?",
+                question: "Come si esegue il <i>ritsu rei</i>?",
                 answers: {
                     a: "In ginocchio",
                     b: "In piedi",
@@ -103,8 +107,55 @@
                     c: "Za Rei"
                 },
                 correctAnswer: "c"
+            },
+            {
+                question: "Nello <i>za rei</i> la posizione di partenza classica &egrave;:",
+                answers: {
+                    a: "Shikko",
+                    b: "Seiza",
+                    c: "Tate shio gatame"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "Qual &egrave; uno scopo didattico del saluto all'inizio della lezione?",
+                answers: {
+                    a: "Aumentare la velocit&agrave; dei colpi",
+                    b: "Segnare il passaggio mentale alla pratica",
+                    c: "Scaldare le caviglie"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "Durante il <i>ritsu rei</i> l'inchino corretto richiede:",
+                answers: {
+                    a: "Perdere l'equilibrio in avanti",
+                    b: "Piegare solo la testa",
+                    c: "Piegare il busto con controllo mantenendo postura"
+                },
+                correctAnswer: "c"
+            },
+            {
+                question: "Nel dojo lo <i>za rei</i> viene spesso usato:",
+                answers: {
+                    a: "Solo durante i combattimenti agonistici",
+                    b: "All'inizio e alla fine della lezione",
+                    c: "Solo per i principianti"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "Quale tra questi &egrave; considerato un errore comune nel <i>rei</i>?",
+                answers: {
+                    a: "Eseguire il gesto con calma e attenzione",
+                    b: "Mantenere equilibrio e presenza",
+                    c: "Fare il saluto in modo frettoloso e distratto"
+                },
+                correctAnswer: "c"
             }
         ];
+
+        const questionPool = myQuestions.slice();
 
         function shuffle(array) {
             let currentIndex = array.length, randomIndex;
@@ -118,7 +169,12 @@
 
         function buildQuiz() {
             const output = [];
-            myQuestions.forEach((currentQuestion, questionNumber) => {
+            const maxN = Math.min(RANDOM_QUIZ_SIZE, questionPool.length);
+            const minN = Math.min(8, maxN);
+            const n = Math.floor(Math.random() * (maxN - minN + 1)) + minN;
+            activeQuestions = shuffle(questionPool.slice()).slice(0, n);
+
+            activeQuestions.forEach((currentQuestion, questionNumber) => {
                 const answerEntries = Object.entries(currentQuestion.answers);
                 const shuffledAnswers = shuffle(answerEntries.slice()); // use slice to avoid mutating original
 
@@ -159,7 +215,7 @@
             const answerContainers = quizContainer.querySelectorAll('.answers');
             let numCorrect = 0;
 
-            myQuestions.forEach((currentQuestion, questionNumber) => {
+            activeQuestions.forEach((currentQuestion, questionNumber) => {
                 const questionContainer = document.getElementById(`question${questionNumber}`);
                 const answerContainer = answerContainers[questionNumber];
                 const selector = `input[name=question${questionNumber}]:checked`;
@@ -176,11 +232,15 @@
                 }
             });
 
-            resultsContainer.innerHTML = `${numCorrect} su ${myQuestions.length} risposte corrette.`;
+            resultsContainer.innerHTML = `${numCorrect} su ${activeQuestions.length} risposte corrette.`;
         }
 
         buildQuiz();
         submitButton.addEventListener('click', showResults);
+        newQuizButton.addEventListener('click', () => {
+            resultsContainer.textContent = '';
+            buildQuiz();
+        });
     </script>
 </body>
 </html>

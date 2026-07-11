@@ -8,10 +8,10 @@
     align-items: start;
 }
 .wiki-section {
-    background: #fff;
-    border: 1px solid #e2e2e2;
-    border-radius: 4px;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+    border: 1px solid #dfe4ee;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(14, 30, 62, 0.08);
     overflow: visible;
     padding: 12px;
     box-sizing: border-box;
@@ -19,17 +19,35 @@
     flex-direction: column;
 }
 .wiki-collapsible {
-    background: #f8f9fa;
-    border: none;
-    padding: 10px 12px;
+    background: linear-gradient(180deg, #f7f9fc 0%, #eef2f7 100%);
+    border: 1px solid #d5ddea;
+    border-radius: 10px;
+    padding: 12px 14px;
     width: 100%; /* header fills the wiki-section width */
     text-align: left;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: 0.1px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
+    transition: transform 0.12s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+}
+
+.wiki-collapsible:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(15, 35, 75, 0.12);
+    border-color: #bfcce0;
+}
+
+.wiki-collapsible:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(64, 129, 255, 0.25), 0 8px 18px rgba(15, 35, 75, 0.12);
+}
+
+.wiki-collapsible.open {
+    background: linear-gradient(180deg, #f0f5ff 0%, #e7eefb 100%);
 }
 .wiki-collapsible .triangle {
     transition: transform 0.2s ease;
@@ -119,19 +137,19 @@
 }
 
 /* Belt colors (pastel) */
-.wiki-section.belt-gialla .wiki-collapsible { background: linear-gradient(180deg,#fff9c4,#fff7a8); color:#222; }
-.wiki-section.belt-arancione .wiki-collapsible { background: linear-gradient(180deg,#ffe0b2,#ffd1a8); color:#222; }
-.wiki-section.belt-verde .wiki-collapsible { background: linear-gradient(180deg,#dff0d8,#c8e6c9); color:#1b5e20; }
-.wiki-section.belt-blu .wiki-collapsible { background: linear-gradient(180deg,#d9eeff,#bbdefb); color:#0d47a1; }
-.wiki-section.belt-marrone .wiki-collapsible { background: linear-gradient(180deg,#efebe9,#e0d7d0); color:#4e342e; }
-.wiki-section.belt-nera .wiki-collapsible { background: linear-gradient(180deg,#616161,#424242); color:#fff; }
+.wiki-section.belt-gialla .wiki-collapsible { background: linear-gradient(180deg,#fff9c4,#fff3a2); color:#222; }
+.wiki-section.belt-arancione .wiki-collapsible { background: linear-gradient(180deg,#ffe1b8,#ffd09b); color:#222; }
+.wiki-section.belt-verde .wiki-collapsible { background: linear-gradient(180deg,#def6df,#c4eac7); color:#1b5e20; }
+.wiki-section.belt-blu .wiki-collapsible { background: linear-gradient(180deg,#ddeeff,#b9ddff); color:#0d47a1; }
+.wiki-section.belt-marrone .wiki-collapsible { background: linear-gradient(180deg,#efe8e3,#dfcfc3); color:#4e342e; }
+.wiki-section.belt-nera .wiki-collapsible { background: linear-gradient(180deg,#545454,#303030); color:#fff; border-color:#3c3c3c; }
 
 /* Links group styling used inside wiki-content */
 .links-group h4 { margin: 6px 0; font-size: 0.95rem; }
 .links-group ul { list-style: none; padding: 6px 0 12px 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
-.links-group li { margin: 0; border: 0.1vw solid black; border-radius: 4px; }
-.links-group a { display:block; padding:6px 8px; background:#fafafa; border-radius:4px; text-decoration:none; color:inherit; }
-.links-group a:hover { background:#eee; }
+.links-group li { margin: 0; border: 1px solid #d7deea; border-radius: 8px; }
+.links-group a { display:block; padding:7px 10px; background:#fafbff; border-radius:8px; text-decoration:none; color:inherit; font-weight:600; }
+.links-group a:hover { background:#eef3ff; }
 /* icon inside link */
 .links-group a img.icon { width:3vw; height:3vw; margin-right:8px; vertical-align:middle; }
 /* card-like style for links */
@@ -141,7 +159,28 @@
 }
 .links-group a:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    box-shadow: 0 8px 20px rgba(22,42,88,0.12);
 }
+
+/* Tecniche: pulsanti colorati per cintura */
+.links-group.belt-gialla-links li { border-color: #e9d76e; }
+.links-group.belt-gialla-links a { background: linear-gradient(180deg, #fffbe0 0%, #fff2b8 100%); border-color: #e9d76e; }
+.links-group.belt-gialla-links a:hover { background: linear-gradient(180deg, #fff6cd 0%, #ffe99a 100%); }
+
+.links-group.belt-arancione-links li { border-color: #f1b36a; }
+.links-group.belt-arancione-links a { background: linear-gradient(180deg, #fff0e1 0%, #ffd9b3 100%); border-color: #f1b36a; }
+.links-group.belt-arancione-links a:hover { background: linear-gradient(180deg, #ffe4cc 0%, #ffc997 100%); }
+
+.links-group.belt-verde-links li { border-color: #8bcf97; }
+.links-group.belt-verde-links a { background: linear-gradient(180deg, #effcf1 0%, #d6f4db 100%); border-color: #8bcf97; }
+.links-group.belt-verde-links a:hover { background: linear-gradient(180deg, #e2f9e7 0%, #bfecc8 100%); }
+
+.links-group.belt-blu-links li { border-color: #8abbe8; }
+.links-group.belt-blu-links a { background: linear-gradient(180deg, #edf6ff 0%, #d6eaff 100%); border-color: #8abbe8; }
+.links-group.belt-blu-links a:hover { background: linear-gradient(180deg, #e0efff 0%, #c2defe 100%); }
+
+.links-group.belt-marrone-links li { border-color: #bca18d; }
+.links-group.belt-marrone-links a { background: linear-gradient(180deg, #f6efea 0%, #e8d8cc 100%); border-color: #bca18d; }
+.links-group.belt-marrone-links a:hover { background: linear-gradient(180deg, #efe5df 0%, #ddc6b6 100%); }
 
 

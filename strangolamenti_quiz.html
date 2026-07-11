@@ -27,6 +27,7 @@
         <h2>Quiz: Strangolamenti (<i>Shime Waza</i>)</h2>
         <div id="quiz-container" class="quiz-container"></div>
         <button id="submit-quiz" class="button">Invia Risposte</button>
+        <button id="new-quiz" class="button" type="button">Nuovo quiz casuale</button>
         <div id="results"></div>
     </section>
 </main>
@@ -35,15 +36,24 @@
 const quizContainer=document.getElementById('quiz-container');
 const resultsContainer=document.getElementById('results');
 const submitButton=document.getElementById('submit-quiz');
+const newQuizButton=document.getElementById('new-quiz');
+const RANDOM_QUIZ_SIZE=10;
+let activeQuestions=[];
 const myQuestions=[
     { question: "Le <i>shime waza</i> agiscono principalmente su:", answers: { a: "La circolazione sanguigna o la respirazione", b: "Le gambe", c: "La presa del polso" }, correctAnswer: "a" },
     { question: "La <i>Nami Juji Jime</i> utilizza:", answers: { a: "Le gambe per triangolare", b: "Il bavero del judogi con presa a croce", c: "Solo una mano" }, correctAnswer: "b" },
-    { question: "La <i>Hadaka Jime</i> &egrave;:", answers: { a: "Una strangolazione a mani nude", b: "Una parata", c: "Una proiezione" }, correctAnswer: "a" }
+    { question: "La <i>Hadaka Jime</i> &egrave;:", answers: { a: "Una strangolazione a mani nude", b: "Una parata", c: "Una proiezione" }, correctAnswer: "a" },
+    { question: "La <i>Gyaku Juji Jime</i> &egrave;:", answers: { a: "La variante rovesciata della juji", b: "Una immobilizzazione montata", c: "Un calcio" }, correctAnswer: "a" },
+    { question: "La <i>Kata Juji Jime</i> si distingue per:", answers: { a: "Presa differente tra le due mani", b: "Solo presa alle gambe", c: "Uso esclusivo del polso" }, correctAnswer: "a" },
+    { question: "La <i>San Kaku Jime</i> usa:", answers: { a: "Una chiusura a triangolo con le gambe", b: "Solo il bavero", c: "Una leva al gomito" }, correctAnswer: "a" },
+    { question: "L'<i>Okuri Eri Jime</i> coinvolge:", answers: { a: "Il bavero del judogi con due mani", b: "Solo una mano senza presa", c: "Solo il pantalone" }, correctAnswer: "a" },
+    { question: "Nello studio delle <i>shime waza</i> &egrave; fondamentale:", answers: { a: "Massimo controllo e supervisione esperta", b: "Velocit&agrave; senza controllo", c: "Eseguire senza segnali del compagno" }, correctAnswer: "a" }
 ];
+const questionPool=myQuestions.slice();
 function shuffle(a){ let c=a.length,r; while(c){ r=Math.floor(Math.random()*c); c--; [a[c],a[r]]=[a[r],a[c]];} return a; }
-function buildQuiz(){ const output=[]; myQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
-function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; myQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${myQuestions.length} risposte corrette.`; }
-buildQuiz(); submitButton.addEventListener('click',showResults);
+function buildQuiz(){ const output=[]; const maxN=Math.min(RANDOM_QUIZ_SIZE,questionPool.length),minN=Math.min(8,maxN),n=Math.floor(Math.random()*(maxN-minN+1))+minN; activeQuestions=shuffle(questionPool.slice()).slice(0,n); activeQuestions.forEach((q,qn)=>{ const entries=Object.entries(q.answers); const shuffled=shuffle(entries.slice()); const answers=[]; for(const [k,t] of shuffled){ answers.push(`<label><input type="radio" name="question${qn}" value="${k}"> ${t}</label>`); } output.push(`<div class="question" id="question${qn}"><p>${qn+1}. ${q.question}</p><div class="answers">${answers.join('')}</div></div>`); }); quizContainer.innerHTML=output.join(''); const inputs=quizContainer.querySelectorAll('input[type=radio]'); inputs.forEach(i=>i.addEventListener('change',e=>{ const qdiv=e.target.closest('.question'); if(qdiv) qdiv.classList.remove('correct','incorrect'); resultsContainer.textContent=''; })); }
+function showResults(){ const answerContainers=quizContainer.querySelectorAll('.answers'); let numCorrect=0; activeQuestions.forEach((q,qn)=>{ const qdiv=document.getElementById(`question${qn}`); const aContainer=answerContainers[qn]; const sel=`input[name=question${qn}]:checked`; const user=(aContainer.querySelector(sel)||{}).value; qdiv.classList.remove('correct','incorrect'); if(user===q.correctAnswer){ numCorrect++; qdiv.classList.add('correct'); } else { qdiv.classList.add('incorrect'); } }); resultsContainer.innerHTML=`${numCorrect} su ${activeQuestions.length} risposte corrette.`; }
+buildQuiz(); submitButton.addEventListener('click',showResults); newQuizButton.addEventListener('click',()=>{ resultsContainer.textContent=''; buildQuiz(); });
 </script>
 </body>
 </html>
