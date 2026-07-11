@@ -63,6 +63,18 @@
             border-radius: 8px;
             background: #fbfdff;
         }
+        .tech-quiz .q.correct {
+            border-color: #9cd7a8;
+            background: #eefbf1;
+        }
+        .tech-quiz .q.incorrect {
+            border-color: #ef9f95;
+            background: #fff3f2;
+        }
+        .tech-quiz .q.unanswered {
+            border-color: #f0cd87;
+            background: #fff9eb;
+        }
         .tech-quiz .q p {
             margin: 0 0 8px;
             font-weight: 600;
@@ -70,6 +82,12 @@
         .tech-quiz .q label {
             display: block;
             margin: 4px 0;
+        }
+        .tech-quiz .q .q-feedback {
+            margin: 8px 0 0;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #1f2d3d;
         }
         .tech-quiz-actions {
             display: flex;
@@ -407,8 +425,23 @@
                 const answers = q.options.map(opt => {
                     return `<label><input type="radio" name="${name}" value="${opt}"> ${opt}</label>`;
                 }).join('');
-                return `<div class="q" data-index="${idx}"><p>${idx + 1}. ${q.text}</p>${answers}</div>`;
+                return `<div class="q" data-index="${idx}"><p>${idx + 1}. ${q.text}</p>${answers}<p class="q-feedback"></p></div>`;
             }).join('');
+
+            const clearState = (qEl) => {
+                if (!qEl) return;
+                qEl.classList.remove('correct', 'incorrect', 'unanswered');
+                const fb = qEl.querySelector('.q-feedback');
+                if (fb) fb.textContent = '';
+            };
+
+            container.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.addEventListener('change', (ev) => {
+                    const qEl = ev.target.closest('.q');
+                    clearState(qEl);
+                    result.textContent = '';
+                });
+            });
         }
 
         function bindTechniqueQuizActions(getQuestions) {
@@ -421,11 +454,44 @@
             checkBtn.onclick = () => {
                 const questions = getQuestions();
                 let score = 0;
+                const wrong = [];
+                const unanswered = [];
+
                 questions.forEach((q, idx) => {
                     const selected = document.querySelector(`input[name="tech-q-${idx}"]:checked`);
-                    if (selected && selected.value === q.correct) score += 1;
+                    const qEl = document.querySelector(`.tech-quiz .q[data-index="${idx}"]`);
+                    if (!qEl) return;
+
+                    qEl.classList.remove('correct', 'incorrect', 'unanswered');
+                    const fb = qEl.querySelector('.q-feedback');
+
+                    if (!selected) {
+                        unanswered.push(idx + 1);
+                        qEl.classList.add('unanswered');
+                        if (fb) fb.textContent = `⚠️ Nessuna risposta. Corretta: ${q.correct}`;
+                        return;
+                    }
+
+                    if (selected.value === q.correct) {
+                        score += 1;
+                        qEl.classList.add('correct');
+                        if (fb) fb.textContent = '✅ Corretta';
+                    } else {
+                        wrong.push(idx + 1);
+                        qEl.classList.add('incorrect');
+                        if (fb) fb.textContent = `❌ Errata. Corretta: ${q.correct}`;
+                    }
                 });
-                result.textContent = `Risultato: ${score}/${questions.length}`;
+
+                if (!wrong.length && !unanswered.length) {
+                    result.textContent = `Risultato: ${score}/${questions.length}. Perfetto!`;
+                    return;
+                }
+
+                const parts = [];
+                if (wrong.length) parts.push(`Errate: ${wrong.join(', ')}`);
+                if (unanswered.length) parts.push(`Non risposte: ${unanswered.join(', ')}`);
+                result.textContent = `Risultato: ${score}/${questions.length}. ${parts.join(' • ')}`;
             };
 
             newBtn.onclick = () => {
