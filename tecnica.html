@@ -119,7 +119,7 @@
             <div class="related-links" id="related"></div>
 
             <div class="tech-quiz" id="tech-quiz">
-                <h3>Quiz tecnica</h3>
+                <h3>Quiz</h3>
                 <p class="muted">Domande create in base al codice selezionato.</p>
                 <div id="quiz-tech-container"></div>
                 <div class="tech-quiz-actions">
@@ -134,7 +134,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Learn Ju-Jitsu. Tutti i diritti riservati.</p>
+        <p>&copy; <script>document.write(new Date().getFullYear())</script> Learn Ju-Jitsu. Tutti i diritti riservati.</p>
     </footer>
 
     <script>
@@ -393,18 +393,7 @@
                 correct: safety
             };
 
-            const q5 = {
-                text: `Per approfondire ${code}, quale pagina teoria è più collegata?`,
-                options: shuffle(unique([
-                    firstRelated,
-                    'Storia',
-                    'Parti del judogi',
-                    'Saluto'
-                ])),
-                correct: firstRelated
-            };
-
-            const all = [q1, q2, q3, q4, q5];
+            const all = [q1, q2, q3, q4];
             return shuffle(all);
         }
 
